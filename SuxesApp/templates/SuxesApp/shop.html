@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SuXeS Lux Thread - Shop</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- AOS for animations -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Google Fonts (Montserrat for bold, urban typography) -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #fff;
+            color: #000;
+            overflow-x: hidden;
+        }
+        /* Sticky Navbar */
+        .navbar {
+            background-color: #000;
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #fff !important;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+        }
+        .navbar-brand img {
+            width: 40px;
+            margin-right: 10px;
+        }
+        .navbar-nav .nav-link {
+            color: #fff !important;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin: 0 15px;
+            transition: color 0.3s ease;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #999 !important;
+        }
+        /* Cart and Profile Icons */
+        .navbar-icons {
+            display: flex;
+            align-items: center;
+        }
+        .cart-icon {
+            position: relative;
+            color: #fff;
+            font-size: 1.5rem;
+            margin: 0 15px;
+            transition: color 0.3s ease;
+        }
+        .cart-icon:hover {
+            color: #999;
+        }
+        .cart-count {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: #666;
+            color: #fff;
+            font-size: 0.8rem;
+            font-weight: 700;
+            border-radius: 50%;
+            padding: 2px 6px;
+            min-width: 20px;
+            text-align: center;
+        }
+        .profile-icon {
+            color: #fff;
+            font-size: 1.5rem;
+            margin: 0 15px;
+            transition: color 0.3s ease;
+        }
+        .profile-icon:hover {
+            color: #999;
+        }
+        .btn-login {
+            background-color: #fff;
+            color: #000;
+            font-weight: 700;
+            padding: 8px 20px;
+            border-radius: 0;
+            transition: all 0.3s ease;
+        }
+        .btn-login:hover {
+            background-color: #666;
+            color: #fff;
+        }
+        /* Mobile Cart Icon */
+        .cart-mobile {
+            display: none;
+            position: relative;
+            color: #fff;
+            font-size: 1.5rem;
+            margin-left: 15px;
+        }
+        .cart-mobile:hover {
+            color: #999;
+        }
+        /* Shop Section */
+        .shop-section {
+            padding: 80px 0;
+            background-color: #fff;
+        }
+        .shop-section h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .filter-sidebar {
+            background-color: #f8f8f8;
+            padding: 20px;
+        }
+        .filter-sidebar h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        .filter-group {
+            margin-bottom: 20px;
+        }
+        .filter-group label {
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: block;
+        }
+        .filter-group input, .filter-group select {
+            border-radius: 0;
+            border: 1px solid #999;
+        }
+        .size-filter, .color-filter {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .size-filter label, .color-filter label {
+            font-weight: 400;
+            margin-bottom: 0;
+        }
+        .filter-toggle {
+            display: none;
+            background-color: #000;
+            color: #fff;
+            font-weight: 700;
+            padding: 10px;
+            border-radius: 0;
+            width: 100%;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .filter-toggle:hover {
+            background-color: #666;
+        }
+        .product-card {
+            position: relative;
+            overflow: hidden;
+            border: none;
+            background-color: #fff;
+            transition: transform 0.3s ease;
+        }
+        .product-card img {
+            width: 100%;
+            height: auto;
+            transition: transform 0.3s ease;
+        }
+        .product-card:hover img {
+            transform: scale(1.1);
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+        .product-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 15px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .product-card:hover .product-overlay {
+            opacity: 1;
+        }
+        .product-info {
+            display: none;
+            background-color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+        .product-info h5 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .product-info p {
+            font-size: 0.9rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .btn-add-to-cart {
+            background-color: #000;
+            color: #fff;
+            font-weight: 700;
+            padding: 8px 20px;
+            border-radius: 0;
+            transition: all 0.3s ease;
+        }
+        .btn-add-to-cart:hover {
+            background-color: #666;
+            color: #fff;
+        }
+        .pagination {
+            justify-content: center;
+            margin-top: 40px;
+        }
+        .page-link {
+            color: #000;
+            border-radius: 0;
+            border: 1px solid #999;
+            margin: 0 5px;
+        }
+        .page-link:hover {
+            background-color: #666;
+            color: #fff;
+            border-color: #666;
+        }
+        .page-item.active .page-link {
+            background-color: #000;
+            color: #fff;
+            border-color: #000;
+        }
+        /* Footer */
+        .footer {
+            background-color: #000;
+            padding: 40px 0;
+            color: #fff;
+        }
+        .footer a {
+            color: #999;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .footer a:hover {
+            color: #fff;
+        }
+        .social-icons a {
+            font-size: 1.5rem;
+            margin: 0 10px;
+            color: #999;
+        }
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .shop-section h1 {
+                font-size: 1.8rem;
+            }
+            .navbar-brand {
+                font-size: 1.5rem;
+            }
+            .navbar-brand img {
+                width: 30px;
+            }
+            .navbar-icons {
+                display: none;
+            }
+            .cart-mobile {
+                display: inline-block;
+            }
+            .btn-login {
+                margin: 10px 0;
+            }
+            .filter-sidebar {
+                margin-bottom: 20px;
+            }
+            .filter-toggle {
+                display: block;
+            }
+            .filter-content {
+                display: none;
+            }
+            .filter-content.show {
+                display: block;
+            }
+            .size-filter label, .color-filter label {
+                font-size: 0.9rem;
+            }
+            .size-filter input, .color-filter input {
+                transform: scale(0.8);
+            }
+            .product-overlay {
+                display: none;
+            }
+            .product-info {
+                display: block;
+            }
+        }
+        @media (min-width: 769px) {
+            .cart-mobile {
+                display: none;
+            }
+            .filter-toggle {
+                display: none;
+            }
+            .filter-content {
+                display: block !important;
+            }
+            .product-info {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sticky Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="LOGO ISOTYOE WHITE.png" alt="SuXeS Lux Thread Logo">
+                <span>SuXeS Lux Thread</span>
+            </a>
+            <a href="cart.html" class="cart-mobile">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-count" id="cartCountMobile">0</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#shop">Shop</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="lookbook.html">Lookbook</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html">Contact</a>
+                    </li>
+                </ul>
+                <div class="navbar-icons ms-3">
+                    <a href="cart.html" class="cart-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count" id="cartCount">0</span>
+                    </a>
+                    <a href="account.html" class="profile-icon">
+                        <i class="fas fa-user"></i>
+                    </a>
+                    <a href="login.html" class="btn btn-login">Login</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Shop Section -->
+    <section class="shop-section">
+        <div class="container">
+            <h1 data-aos="fade-up">Shop All</h1>
+            <div class="row">
+                <!-- Filters Sidebar -->
+                <div class="col-lg-3 col-md-4">
+                    <div class="filter-sidebar" data-aos="fade-right">
+                        <button class="filter-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#filterContent">
+                            Filters
+                        </button>
+                        <div class="filter-content collapse" id="filterContent">
+                            <h3>Filters</h3>
+                            <div class="filter-group">
+                                <label>Category</label>
+                                <select class="form-select">
+                                    <option>All</option>
+                                    <option>Hoodies</option>
+                                    <option>T-Shirts</option>
+                                    <option>Pants</option>
+                                    <option>Accessories</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <label>Price Range</label>
+                                <input type="range" class="form-range" min="0" max="200" step="10" value="200">
+                                <div class="d-flex justify-content-between">
+                                    <span>$0</span>
+                                    <span>$200</span>
+                                </div>
+                            </div>
+                            <div class="filter-group">
+                                <label>Size</label>
+                                <div class="size-filter">
+                                    <div><input type="checkbox" id="size-s"> <label for="size-s">S</label></div>
+                                    <div><input type="checkbox" id="size-m"> <label for="size-m">M</label></div>
+                                    <div><input type="checkbox" id="size-l"> <label for="size-l">L</label></div>
+                                    <div><input type="checkbox" id="size-xl"> <label for="size-xl">XL</label></div>
+                                </div>
+                            </div>
+                            <div class="filter-group">
+                                <label>Color</label>
+                                <div class="color-filter">
+                                    <div><input type="checkbox" id="color-black"> <label for="color-black">Black</label></div>
+                                    <div><input type="checkbox" id="color-grey"> <label for="color-grey">Grey</label></div>
+                                    <div><input type="checkbox" id="color-white"> <label for="color-white">White</label></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Product Grid -->
+                <div class="col-lg-9 col-md-8">
+                    <div class="row">
+                        <div class="col-6 col-md-4 col-sm-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+                            <div class="product-card" data-name="Hoodie Alpha" data-price="89.99">
+                                <img src="JAZ_5029 1.jpg" alt="Hoodie Alpha">
+                                <div class="product-overlay">
+                                    <h5>Hoodie Alpha</h5>
+                                    <p>$89.99</p>
+                                    <a href="#" class="btn btn-add-to-cart" onclick="addToCart('Hoodie Alpha', 89.99)">Add to Cart</a>
+                                </div>
+                                <div class="product-info">
+                                    <h5>Hoodie Alpha</h5>
+                                    <p>$89.99</p>
+                                    <a href="#" class="btn btn-add-to-cart" onclick="addToCart('Hoodie Alpha', 89.99)">Add to Cart</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-4 col-sm-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+                            <div class="product-card" data-name="Street Tee" data-price="49.99">
+                                <img src="JAZ_5044 1.jpg" alt="Street Tee">
+                                <div class="product-overlay">
+                                    <h5>Street Tee</h5>
+                                    <p>$49.99</p>
+                                    <a href="#" class="btn btn-add-to-cart" onclick="addToCart('Street Tee', 49.99)">Add to Cart</a>
+                                </div>
+                                <div class="product-info">
+                                    <h5>Street Tee</h5>
+                                    <p>$49.99</p>
+                                    <a href="#" class="btn btn-add-to-cart" onclick="addToCart('Street Tee', 49.99)">Add to Cart</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-4 col-sm-6 mb-4" data-aos="fade-up" data-aos-delay="300">
+                            <div class="product-card" data-name="Cargo Pants" data-price="79.99">
+                                <img src="JAZ_5036.jpg" alt="Cargo Pants">
+                                <div class="product-overlay">
+                                    <h5>Cargo Pants</h5>
+                                    <p>$79.99</p>
+                                    <a href="#" class="btn btn-add-to-cart" onclick="addToCart('Cargo Pants', 79.99)">Add to Cart</a>
+                                </div>
+                                <div class="product-info">
+                                    <h5>Cargo Pants</h5>
+                                    <p>$79.99</p>
+                                    <a href="#" class="btn btn-add-to-cart" onclick="addToCart('Cargo Pants', 79.99)">Add to Cart</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-4 col-sm-6 mb-4" data-aos="fade-up" data-aos-delay="400">
+                            <div class="product-card" data-name="Jacket Elite" data-price="99.99">
+                                <img src="JAZ_5058 1.jpg" alt="Jacket Elite">
+                                <div class="product-overlay">
+                                    <h5>Jacket Elite</h5>
+                                    <p>$99.99</p>
+                                    <a href="#" class="btn btn-add-to-cart" onclick="addToCart('Jacket Elite', 99.99)">Add to Cart</a>
+                                </div>
+                                <div class="product-info">
+                                    <h5>Jacket Elite</h5>
+                                    <p>$99.99</p>
+                                    <a href="#" class="btn btn-add-to-cart" onclick="addToCart('Jacket Elite', 99.99)">Add to Cart</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-4 col-sm-6 mb-4" data-aos="fade-up" data-aos-delay="500">
+                            <div class="product-card" data-name="Snapback Cap" data-price="39.99">
+                                <img src="JAZ_5023 1.jpg" alt="Snapback Cap">
+                                <div class="product-overlay">
+                                    <h5>Snapback Cap</h5>
+                                    <p>$39.99</p>
+                                    <a href="#" class="btn btn-add-to-cart" onclick="addToCart('Snapback Cap', 39.99)">Add to Cart</a>
+                                </div>
+                                <div class="product-info">
+                                    <h5>Snapback Cap</h5>
+                                    <p>$39.99</p>
+                                    <a href="#" class="btn btn-add-to-cart" onclick="addToCart('Snapback Cap', 39.99)">Add to Cart</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-4 col-sm-6 mb-4" data-aos="fade-up" data-aos-delay="600">
+                            <div class="product-card" data-name="Hoodie Beta" data-price="94.99">
+                                <img src="JAZ_5029 1.jpg" alt="Hoodie Beta">
+                                <div class="product-overlay">
+                                    <h5>Hoodie Beta</h5>
+                                    <p>$94.99</p>
+                                    <a href="#" class="btn btn-add-to-cart" onclick="addToCart('Hoodie Beta', 94.99)">Add to Cart</a>
+                                </div>
+                                <div class="product-info">
+                                    <h5>Hoodie Beta</h5>
+                                    <p>$94.99</p>
+                                    <a href="#" class="btn btn-add-to-cart" onclick="addToCart('Hoodie Beta', 94.99)">Add to Cart</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Pagination -->
+                    <nav aria-label="Product pagination">
+                        <ul class="pagination">
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="Previous">
+                                    <span aria-hidden="true">«</span>
+                                </a>
+                            </li>
+                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="Next">
+                                    <span aria-hidden="true">»</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <h5>SuXeS Lux Thread</h5>
+                    <p>Forever Relentless. Blending luxury with street culture.</p>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="index.html#shop">Shop</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h5>Follow Us</h5>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="text-center">
+                <p><a href="#">Terms & Conditions</a> | <a href="#">Privacy Policy</a></p>
+                <p>© 2025 SuXeS Lux Thread. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS and Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- AOS JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            once: true
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Cart item count
+        let cartCount = 0;
+        const cartCountElement = document.getElementById('cartCount');
+        const cartCountMobileElement = document.getElementById('cartCountMobile');
+        function updateCartCount() {
+            cartCountElement.textContent = cartCount;
+            cartCountMobileElement.textContent = cartCount;
+        }
+        // Add to cart functionality
+        function addToCart(name, price) {
+            cartCount++;
+            updateCartCount();
+            // Placeholder: Add to localStorage or backend
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart.push({ name, price, quantity: 1 });
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
+        // Initialize cart count
+        updateCartCount();
+    </script>
+</body>
+</html>

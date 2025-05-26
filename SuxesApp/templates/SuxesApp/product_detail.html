@@ -1,0 +1,650 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SuXeS Lux Thread - Product Detail</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- AOS for animations -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Google Fonts (Montserrat for bold, urban typography) -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #fff;
+            color: #000;
+            overflow-x: hidden;
+        }
+        /* Sticky Navbar */
+        .navbar {
+            background-color: #000;
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #fff !important;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+        }
+        .navbar-brand img {
+            width: 40px;
+            margin-right: 10px;
+        }
+        .navbar-nav .nav-link {
+            color: #fff !important;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin: 0 15px;
+            transition: color 0.3s ease;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #999 !important;
+        }
+        /* Cart and Profile Icons */
+        .navbar-icons {
+            display: flex;
+            align-items: center;
+        }
+        .cart-icon {
+            position: relative;
+            color: #fff;
+            font-size: 1.5rem;
+            margin: 0 15px;
+            transition: color 0.3s ease;
+        }
+        .cart-icon:hover {
+            color: #999;
+        }
+        .cart-count {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: #666;
+            color: #fff;
+            font-size: 0.8rem;
+            font-weight: 700;
+            border-radius: 50%;
+            padding: 2px 6px;
+            min-width: 20px;
+            text-align: center;
+        }
+        .profile-icon {
+            color: #fff;
+            font-size: 1.5rem;
+            margin: 0 15px;
+            transition: color 0.3s ease;
+        }
+        .profile-icon:hover {
+            color: #999;
+        }
+        .btn-login {
+            background-color: #fff;
+            color: #000;
+            font-weight: 700;
+            padding: 8px 20px;
+            border-radius: 0;
+            transition: all 0.3s ease;
+        }
+        .btn-login:hover {
+            background-color: #666;
+            color: #fff;
+        }
+        /* Mobile Cart Icon */
+        .cart-mobile {
+            display: none;
+            position: relative;
+            color: #fff;
+            font-size: 1.5rem;
+            margin-left: 15px;
+        }
+        .cart-mobile:hover {
+            color: #999;
+        }
+        /* Product Detail Section */
+        .product-detail-section {
+            padding: 80px 0;
+            background-color: #fff;
+        }
+        .product-image-main {
+            position: relative;
+            overflow: hidden;
+            cursor: zoom-in;
+        }
+        .product-image-main img {
+            width: 100%;
+            height: auto;
+            transition: transform 0.3s ease;
+        }
+        .product-image-main:hover img {
+            transform: scale(1.2);
+        }
+        .product-thumbnails {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            max-width: 100%;
+            overflow: hidden;
+        }
+        .product-thumbnails img {
+            width: 80px;
+            height: 100px;
+            object-fit: cover;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+        .product-thumbnails img:hover {
+            opacity: 0.8;
+        }
+        .product-details h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+        .product-details .price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .size-selector, .color-selector, .quantity-selector {
+            margin-bottom: 20px;
+        }
+        .size-selector label, .color-selector label, .quantity-selector label {
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: block;
+        }
+        .size-selector .btn-size {
+            background-color: #fff;
+            border: 1px solid #999;
+            color: #000;
+            padding: 10px 20px;
+            margin-right: 10px;
+            border-radius: 0;
+            transition: all 0.3s ease;
+        }
+        .size-selector .btn-size:hover, .size-selector .btn-size.active {
+            background-color: #666;
+            color: #fff;
+        }
+        .color-selector .color-option {
+            width: 30px;
+            height: 30px;
+            display: inline-block;
+            margin-right: 10px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: border 0.3s ease;
+        }
+        .color-selector .color-option:hover, .color-selector .color-option.active {
+            border: 2px solid #666;
+        }
+        .quantity-selector input {
+            width: 80px;
+            padding: 10px;
+            border: 1px solid #999;
+            background-color: #fff;
+            color: #000;
+            border-radius: 0;
+            font-weight: 700;
+        }
+        .btn-add-to-cart {
+            background-color: #000;
+            color: #fff;
+            font-weight: 700;
+            padding: 12px 30px;
+            border-radius: 0;
+            transition: all 0.3s ease;
+        }
+        .btn-add-to-cart:hover {
+            background-color: #666;
+            color: #fff;
+            transform: translateY(-3px);
+        }
+        .description, .shipping-returns {
+            margin-top: 40px;
+        }
+        .description h3, .shipping-returns h3 {
+            font-size: 1.8rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+        }
+        .accordion-button {
+            background-color: #fff;
+            color: #000;
+            font-weight: 700;
+            border-radius: 0;
+        }
+        .accordion-button:not(.collapsed) {
+            background-color: #666;
+            color: #fff;
+        }
+        .reviews-section {
+            margin-top: 40px;
+        }
+        .reviews-section h3 {
+            font-size: 1.8rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+        }
+        .review-card {
+            border-bottom: 1px solid #999;
+            padding: 20px 0;
+        }
+        .review-form {
+            margin-top: 30px;
+        }
+        /* Footer */
+        .footer {
+            background-color: #000;
+            padding: 40px 0;
+            color: #fff;
+        }
+        .footer a {
+            color: #999;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .footer a:hover {
+            color: #fff;
+        }
+        .social-icons a {
+            font-size: 1.5rem;
+            margin: 0 10px;
+            color: #999;
+        }
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .product-details h1 {
+                font-size: 1.8rem;
+            }
+            .product-details .price {
+                font-size: 1.5rem;
+            }
+            .description h3, .shipping-returns h3, .reviews-section h3 {
+                font-size: 1.5rem;
+            }
+            .navbar-brand {
+                font-size: 1.5rem;
+            }
+            .navbar-brand img {
+                width: 30px;
+            }
+            .navbar-icons {
+                display: none;
+            }
+            .cart-mobile {
+                display: inline-block;
+            }
+            .btn-login {
+                margin: 10px 0;
+            }
+            .product-thumbnails img {
+                width: 60px;
+                height: 80px;
+            }
+        }
+        @media (min-width: 769px) {
+            .cart-mobile {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sticky Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="{% static 'images/LOGO  ISOTYOE WHITE.png' %}" style="width: 60px;" alt="SuXeS Lux Thread Logo">
+                <span>SuXeS Lux Thread</span>
+            </a>
+            <a href="{% url 'cart' %}" class="cart-mobile">
+                <i class="fas fa-shopping-cart"></i>
+                {% if cart_count > 0 %}
+                <span class="cart-count" id="cartCountMobile">{{ cart_count }}</span>
+                {% endif %}
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'shop' %}">Shop</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'lookbook' %}">Lookbook</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'about' %}">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'contact' %}">Contact</a>
+                    </li>
+                </ul>
+                <div class="navbar-icons ms-3">
+                    <a href="{% url 'cart' %}" class="cart-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                        {% if cart_count > 0 %}
+                        <span class="cart-count" id="cartCount">{{ cart_count }}</span>
+                        {% endif %}
+                    </a>
+                    <a href="{% url 'profile' %}" class="profile-icon">
+                        <i class="fas fa-user"></i>
+                    </a>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'logout_user' %}" class="btn btn-login" title="Logout">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </a>
+                    {% else %}
+                        <a href="{% url 'login_user' %}" class="btn btn-login">Login</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    
+    <!-- Product Detail Section -->
+    <section class="product-detail-section">
+        <div class="container">
+            <div class="row" data-aos="fade-up">
+                <!-- Product Images -->
+                <div class="col-md-6">
+                    <div class="product-image-main mb-3">
+                        {% if product.images.first %}
+                            <img src="{{ product.images.first.image.url }}" alt="{{ product.name }}" id="mainImage">
+                        {% else %}
+                            <img src="{% static 'images/default.jpg' %}" alt="{{ product.name }}" id="mainImage">
+                        {% endif %}
+                    </div>
+                    <div class="product-thumbnails">
+                        {% for image in product.images.all %}
+                            <img src="{{ image.image.url }}" alt="{{ product.name }} View" class="thumbnail" data-image="{{ image.image.url }}">
+                        {% empty %}
+                            <img src="{% static 'images/default.jpg' %}" alt="Default Image" class="thumbnail" data-image="{% static 'images/default.jpg' %}">
+                        {% endfor %}
+                    </div>
+                </div>
+                <!-- Product Details -->
+                <div class="col-md-6 product-details">
+                    <h1>{{ product.name }}</h1>
+                    <p class="price">${{ product.price }}</p>
+                    <div class="size-selector">
+                        <label>Size</label>
+                        {% for size in available_sizes %}
+                            <button type="button" class="btn btn-size" data-size="{{ size.name }}">{{ size.name }}</button>
+                        {% empty %}
+                            <p>No sizes available</p>
+                        {% endfor %}
+                    </div>
+                    <div class="color-selector">
+                        <label>Color</label>
+                        {% for color in available_colors %}
+                            <span class="color-option" style="background-color: {{ color.hex_code|default:color.name }}; {% if color.hex_code == '#FFFFFF' %}border: 1px solid #999;{% endif %}" data-color="{{ color.name }}"></span>
+                        {% empty %}
+                            <p>No colors available</p>
+                        {% endfor %}
+                    </div>
+                    <form method="POST" action="{% url 'add_to_cart' product.id %}" class="d-flex align-items-center mb-4 quantity-control">
+                        {% csrf_token %}
+                        <input type="hidden" name="size" id="selectedSize">
+                        <input type="hidden" name="color" id="selectedColor">
+                        <button type="button" class="btn btn-outline-secondary" id="decrease">-</button>
+                        <input type="text" id="quantity" name="quantity" value="1" class="form-control text-center mx-2" style="width:60px;" readonly>
+                        <button type="button" class="btn btn-outline-secondary" id="increase">+</button>
+                        <button type="submit" class="btn btn-secondary ms-3 flex-fill">Add to cart</button>
+                    </form>
+                    <div class="description">
+                        <h3>Description</h3>
+                        <p>{{ product.description|default:"No description available." }}</p>
+                    </div>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const decreaseBtn = document.getElementById('decrease');
+                            const increaseBtn = document.getElementById('increase');
+                            const quantityInput = document.getElementById('quantity');
+                            const maxQty = {{ product.in_stock|default:10 }};
+                            const sizeButtons = document.querySelectorAll('.btn-size');
+                            const colorOptions = document.querySelectorAll('.color-option');
+                            const selectedSizeInput = document.getElementById('selectedSize');
+                            const selectedColorInput = document.getElementById('selectedColor');
+
+                            // Quantity controls
+                            decreaseBtn.addEventListener('click', function() {
+                                let qty = parseInt(quantityInput.value) || 1;
+                                if (qty > 1) {
+                                    quantityInput.value = qty - 1;
+                                }
+                            });
+
+                            increaseBtn.addEventListener('click', function() {
+                                let qty = parseInt(quantityInput.value) || 1;
+                                if (qty < maxQty) {
+                                    quantityInput.value = qty + 1;
+                                }
+                            });
+
+                            // Size selection
+                            sizeButtons.forEach(button => {
+                                button.addEventListener('click', function() {
+                                    sizeButtons.forEach(btn => btn.classList.remove('active'));
+                                    this.classList.add('active');
+                                    selectedSizeInput.value = this.dataset.size;
+                                });
+                            });
+
+                            // Color selection
+                            colorOptions.forEach(option => {
+                                option.addEventListener('click', function() {
+                                    colorOptions.forEach(opt => opt.classList.remove('active'));
+                                    this.classList.add('active');
+                                    selectedColorInput.value = this.dataset.color;
+                                });
+                            });
+                        });
+                    </script>
+                    <style>
+                        .btn-size.active {
+                            background-color: #000;
+                            color: #fff;
+                        }
+                        .color-option.active {
+                            border: 2px solid #000;
+                            outline: 2px solid #fff;
+                        }
+                        .color-option {
+                            display: inline-block;
+                            width: 30px;
+                            height: 30px;
+                            margin: 0 5px;
+                            cursor: pointer;
+                        }
+                    </style>
+
+                    <div class="shipping-returns">
+                        <h3>Shipping & Returns</h3>
+                        <div class="accordion" id="shippingAccordion">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#shippingInfo">
+                                        Shipping Info
+                                    </button>
+                                </h2>
+                                <div id="shippingInfo" class="accordion-collapse collapse show" data-bs-parent="#shippingAccordion">
+                                    <div class="accordion-body">
+                                        Free standard shipping on orders over $100. Orders ship within 2-3 business days. International shipping available.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#returnsInfo">
+                                        Returns Info
+                                    </button>
+                                </h2>
+                                <div id="returnsInfo" class="accordion-collapse collapse" data-bs-parent="#shippingAccordion">
+                                    <div class="accordion-body">
+                                        Returns accepted within 30 days of purchase. Items must be unworn and in original condition. Contact support@suxesluxthread.com for details.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="reviews-section">
+                        <h3>Reviews</h3>
+                        <div class="review-card">
+                            <p><strong>John D.</strong> - ★★★★★</p>
+                            <p>Love the fit and quality! The hoodie feels premium and looks dope. Perfect for my street style.</p>
+                        </div>
+                        <div class="review-card">
+                            <p><strong>Sarah K.</strong> - ★★★★☆</p>
+                            <p>Great design, super comfy. Wish there were more color options!</p>
+                        </div>
+                        <div class="review-form">
+                            <h4>Write a Review</h4>
+                            <form>
+                                <div class="mb-3">
+                                    <label class="form-label">Rating</label>
+                                    <select class="form-select" style="border-radius: 0;">
+                                        <option>★★★★★</option>
+                                        <option>★★★★☆</option>
+                                        <option>★★★☆☆</option>
+                                        <option>★★☆☆☆</option>
+                                        <option>★☆☆☆☆</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Your Review</label>
+                                    <textarea class="form-control" rows="4" style="border-radius: 0;" placeholder="Share your thoughts..."></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-add-to-cart">Submit Review</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <h5>SuXeS Lux Thread</h5>
+                    <p>Forever Relentless. Blending luxury with street culture.</p>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#shop">Shop</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h5>Follow Us</h5>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="text-center">
+                <p><a href="#">Terms & Conditions</a> | <a href="#">Privacy Policy</a></p>
+                <p>© 2025 SuXeS Lux Thread. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            once: true
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Cart item count
+        let cartCount = {{ cart_count|default:0 }};
+        const cartCountElement = document.getElementById('cartCount');
+        const cartCountMobileElement = document.getElementById('cartCountMobile');
+        function updateCartCount() {
+            cartCountElement.textContent = cartCount;
+            cartCountMobileElement.textContent = cartCount;
+        }
+
+        // Add to cart functionality
+        function addToCart() {
+            const quantity = parseInt(document.getElementById('quantity').value) || 1;
+            const selectedSize = document.querySelector('.btn-size.active')?.dataset.size || '';
+            const selectedColor = document.querySelector('.color-option.active')?.dataset.color || '';
+            if (!selectedSize || !selectedColor) {
+                alert('Please select a size and color.');
+                return;
+            }
+            cartCount += quantity;
+            updateCartCount();
+            // Optionally, send selected size and color to the server
+            console.log(`Added to cart: ${quantity} x ${selectedSize}, ${selectedColor}`);
+        }
+
+        // Thumbnail image switcher
+        document.querySelectorAll('.thumbnail').forEach(thumbnail => {
+            thumbnail.addEventListener('click', function () {
+                document.getElementById('mainImage').src = this.dataset.image;
+            });
+        });
+
+        // Size selector
+        document.querySelectorAll('.btn-size').forEach(button => {
+            button.addEventListener('click', function () {
+                document.querySelectorAll('.btn-size').forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Color selector
+        document.querySelectorAll('.color-option').forEach(color => {
+            color.addEventListener('click', function () {
+                document.querySelectorAll('.color-option').forEach(clr => clr.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Initialize cart count
+        updateCartCount();
+    </script>
+</body>
+</html>

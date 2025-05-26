@@ -1,0 +1,9 @@
+/* static/css/fonts.css */
+
+@font-face {
+    font-family: 'Kaleko 105';
+    src: url('{% static "fonts/kaleko-105/Kaleko105-Regular.woff2" %}') format('woff2'),
+         url('{% static "fonts/kaleko-105/Kaleko105-Regular.woff" %}') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}

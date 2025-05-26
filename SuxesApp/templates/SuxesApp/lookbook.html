@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SuXeS Lux Thread - Lookbook</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- AOS for animations -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Google Fonts (Montserrat for bold, urban typography) -->
+    <link href="https://fonts.googleapis.comcss2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #fff;
+            color: #000;
+            overflow-x: hidden;
+        }
+        /* Sticky Navbar */
+        .navbar {
+            background-color: #000;
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #fff !important;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+        }
+        .navbar-brand img {
+            width: 40px;
+            margin-right: 10px;
+        }
+        .navbar-nav .nav-link {
+            color: #fff !important;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin: 0 15px;
+            transition: color 0.3s ease;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #999 !important;
+        }
+        .navbar-icons {
+            display: flex;
+            align-items: center;
+        }
+        .cart-icon {
+            position: relative;
+            color: #fff;
+            font-size: 1.5rem;
+            margin: 0 15px;
+            transition: color 0.3s ease;
+        }
+        .cart-icon:hover {
+            color: #999;
+        }
+        .cart-count {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: #666;
+            color: #fff;
+            font-size: 0.8rem;
+            font-weight: 700;
+            border-radius: 50%;
+            padding: 2px 6px;
+            min-width: 20px;
+            text-align: center;
+        }
+        .profile-icon {
+            color: #fff;
+            font-size: 1.5rem;
+            margin: 0 15px;
+            transition: color 0.3s ease;
+        }
+        .profile-icon:hover {
+            color: #999;
+        }
+        .btn-login {
+            background-color: #fff;
+            color: #000;
+            font-weight: 700;
+            padding: 8px 20px;
+            border-radius: 0;
+            transition: all 0.3s ease;
+        }
+        .btn-login:hover {
+            background-color: #666;
+            color: #fff;
+        }
+        .cart-mobile {
+            display: none;
+            position: relative;
+            color: #fff;
+            font-size: 1.5rem;
+            margin-left: 15px;
+        }
+        .cart-mobile:hover {
+            color: #999;
+        }
+        /* Lookbook Section */
+        .lookbook-section {
+            padding: 0;
+            background-color: #fff;
+        }
+        .hero-section {
+            position: relative;
+            height: 80vh;
+            overflow: hidden;
+        }
+        .hero-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #fff;
+        }
+        .hero-overlay h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+        .hero-overlay p {
+            font-size: 1.5rem;
+            font-weight: 400;
+            max-width: 600px;
+        }
+        .vision-section {
+            padding: 60px 0;
+            background-color: #f8f8f8;
+            text-align: center;
+        }
+        .vision-section h2 {
+            font-size: 3rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+        .vision-section p {
+            font-size: 1.2rem;
+            font-weight: 400;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .lookbook-grid {
+            padding: 60px 0;
+        }
+        .lookbook-item {
+            margin-bottom: 40px;
+        }
+        .lookbook-item img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+        .lookbook-item h3 {
+            font-size: 1.8rem;
+            font-weight: 900;
+            margin: 15px 0 10px;
+        }
+        .lookbook-item p {
+            font-size: 1rem;
+            font-weight: 400;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .btn-shop-now {
+            background-color: #000;
+            color: #fff;
+            font-weight: 700;
+            padding: 10px 30px;
+            border-radius: 0;
+            transition: all 0.3s ease;
+        }
+        .btn-shop-now:hover {
+            background-color: #666;
+            color: #fff;
+        }
+        .cta-section {
+            padding: 60px 0;
+            background-color: #000;
+            color: #fff;
+            text-align: center;
+        }
+        .cta-section h2 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+        }
+        .cta-section p {
+            font-size: 1.2rem;
+            font-weight: 400;
+            margin-bottom: 30px;
+        }
+        /* Footer */
+        .footer {
+            background-color: #000;
+            padding: 40px 0;
+            color: #fff;
+        }
+        .footer a {
+            color: #999;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .footer a:hover {
+            color: #fff;
+        }
+        .social-icons a {
+            font-size: 1.5rem;
+            margin: 0 10px;
+            color: #999;
+        }
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .hero-overlay h1 {
+                font-size: 2.5rem;
+            }
+            .hero-overlay p {
+                font-size: 1rem;
+            }
+            .vision-section h2 {
+                font-size: 2rem;
+            }
+            .vision-section p {
+                font-size: 1rem;
+            }
+            .lookbook-item h3 {
+                font-size: 1.5rem;
+            }
+            .lookbook-item p {
+                font-size: 0.9rem;
+            }
+            .cta-section h2 {
+                font-size: 1.8rem;
+            }
+            .cta-section p {
+                font-size: 1rem;
+            }
+            .navbar-brand {
+                font-size: 1.5rem;
+            }
+            .navbar-brand img {
+                width: 30px;
+            }
+            .navbar-icons {
+                display: none;
+            }
+            .cart-mobile {
+                display: inline-block;
+            }
+            .btn-login {
+                margin: 10px 0;
+            }
+        }
+        @media (min-width: 769px) {
+            .cart-mobile {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sticky Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="LOGO ISOTYOE WHITE.png" alt="SuXeS Lux Thread Logo">
+                <span>SuXeS Lux Thread</span>
+            </a>
+            <a href="cart.html" class="cart-mobile">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-count" id="cartCountMobile">0</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#shop">Shop</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="lookbook.html">Lookbook</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html">Contact</a>
+                    </li>
+                </ul>
+                <div class="navbar-icons ms-3">
+                    <a href="cart.html" class="cart-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count" id="cartCount">0</span>
+                    </a>
+                    <a href="account.html" class="profile-icon">
+                        <i class="fas fa-user"></i>
+                    </a>
+                    <a href="login.html" class="btn btn-login">Login</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Lookbook Section -->
+    <section class="lookbook-section">
+        <!-- Hero Section -->
+        <div class="hero-section" data-aos="fade-in">
+            <img src="JAZ_5029 1.jpg" alt="Lookbook Hero" class="hero-image">
+            <div class="hero-overlay">
+                <h1>Forever Relentless</h1>
+                <p>Spring 2025 Collection: Where urban grit meets timeless luxury.</p>
+            </div>
+        </div>
+
+        <!-- Vision Section -->
+        <div class="vision-section" data-aos="fade-up">
+            <div class="container">
+                <h2>Our Vision</h2>
+                <p>SuXeS Lux Thread is more than clothing—it’s a movement. The Spring 2025 Collection, "Forever Relentless," embodies the hustle, ambition, and fearless spirit of those who define their own path. Crafted with premium materials and bold designs, each piece blends street culture with high-end sophistication, empowering you to stand out in every urban jungle.</p>
+            </div>
+        </div>
+
+        <!-- Lookbook Grid -->
+        <div class="lookbook-grid" data-aos="fade-up" data-aos-delay="100">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 lookbook-item">
+                        <img src="JAZ_5044 1.jpg" alt="Look 1">
+                        <h3>Urban Edge</h3>
+                        <p>Oversized silhouettes and heavyweight fabrics designed for the city’s relentless pace.</p>
+                        <a href="shop.html" class="btn btn-shop-now">Shop Now</a>
+                    </div>
+                    <div class="col-md-6 lookbook-item">
+                        <img src="JAZ_5036.jpg" alt="Look 2">
+                        <h3>Street Royalty</h3>
+                        <p>Elevated streetwear with refined details, fit for those who rule the streets.</p>
+                        <a href="shop.html" class="btn btn-shop-now">Shop Now</a>
+                    </div>
+                    <div class="col-md-6 lookbook-item">
+                        <img src="JAZ_5023 1.jpg" alt="Look 3">
+                        <h3>Modern Grit</h3>
+                        <p>Built for the grind, with durable designs that never compromise on style.</p>
+                        <a href="shop.html" class="btn btn-shop-now">Shop Now</a>
+                    </div>
+                    <div class="col-md-6 lookbook-item">
+                        <img src="JAZ_5058 1.jpg" alt="Look 4">
+                        <h3>Luxury Rebellion</h3>
+                        <p>Defiant and bold, for those who rewrite the rules with every step.</p>
+                        <a href="shop.html" class="btn btn-shop-now">Shop Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <div class="cta-section" data-aos="fade-up" data-aos-delay="200">
+            <div class="container">
+                <h2>Join the Movement</h3>
+                <p>Explore the Spring 2025 Collection and redefine streetwear with SuXeS Lux Thread.</p>
+                <a href="shop.html" class="btn btn-shop-now">Shop the Collection</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <h5>SuXeS Lux Thread</h5>
+                    <p>Forever Relentless. Blending luxury with street culture.</p>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="index.html#shop">Shop</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h5>Follow Us</h5>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="text-center">
+                <p><a href="#">Terms & Conditions</a> | <a href="#">Privacy Policy</a></p>
+                <p>© 2025 SuXeS Lux Thread. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS and Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- AOS JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            once: true
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Cart item count (example logic)
+        let cartCount = 0;
+        const cartCountElement = document.getElementById('cartCount');
+        const cartCountMobileElement = document.getElementById('cartCountMobile');
+        function updateCartCount() {
+            cartCountElement.textContent = cartCount;
+            cartCountMobileElement.textContent = cartCount;
+        }
+        // Initialize cart count
+        updateCartCount();
+    </script>
+</body>
+</html>
