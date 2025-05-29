@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -328,11 +329,11 @@
     <!-- Sticky Navbar -->
     <nav class="navbar navbar-expand-lg">
         <div class="container">
-            <a class="navbar-brand" href="index.html">
-                <img src="LOGO ISOTYOE WHITE.png" alt="SuXeS Lux Thread Logo">
+            <a class="navbar-brand" href="#">
+                <img src="{% static 'images/LOGO  ISOTYOE WHITE.png' %}" style="width: 60px;" alt="SuXeS Lux Thread Logo">
                 <span>SuXeS Lux Thread</span>
             </a>
-            <a href="cart.html" class="cart-mobile">
+            <a href="#cart" class="cart-mobile">
                 <i class="fas fa-shopping-cart"></i>
                 <span class="cart-count" id="cartCountMobile">0</span>
             </a>
@@ -342,196 +343,114 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html#home">Home</a>
+                        <a class="nav-link" href="{% url 'home' %}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html#shop">Shop</a>
+                        <a class="nav-link" href="{% url 'shop' %}">Shop</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="lookbook.html">Lookbook</a>
+                        <a class="nav-link" href="{% url 'lookbook' %}">Lookbook</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="about.html">About</a>
+                        <a class="nav-link" href="{% url 'about' %}">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="contact.html">Contact</a>
+                        <a class="nav-link" href="{% url 'contact' %}">Contact</a>
                     </li>
                 </ul>
                 <div class="navbar-icons ms-3">
-                    <a href="cart.html" class="cart-icon">
+                    <a href="{% url 'cart' %}" class="cart-icon">
                         <i class="fas fa-shopping-cart"></i>
                         <span class="cart-count" id="cartCount">0</span>
                     </a>
-                    <a href="account.html" class="profile-icon">
+                    <a href="{% url 'profile' %}" class="profile-icon">
                         <i class="fas fa-user"></i>
                     </a>
-                    <a href="login.html" class="btn btn-login">Login</a>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'logout_user' %}" class="btn btn-login" title="Logout">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </a>
+                    {% else %}
+                        <a href="{% url 'login_user' %}" class="btn btn-login">Login</a>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </nav>
 
+
     <!-- Shop Section -->
     <section class="shop-section">
         <div class="container">
             <h1 data-aos="fade-up">Shop All</h1>
+            <!-- Search Bar -->
+            <div class="search-bar mb-4" data-aos="fade-up">
+                <form id="searchForm" method="GET" action="{% url 'shop' %}" class="d-flex">
+                    <input type="text" id="searchInput" name="search" class="form-control me-2" placeholder="Search by product or category..." value="{{ search_query|default:'' }}">
+                    <button type="submit" class="btn btn-bark" style="background-color: black; color: white;" >Search</button>
+                    <a href="{% url 'shop' %}" class="btn btn-secondary ms-2">Show All Products</a>
+                </form>
+            </div>
             <div class="row">
-                <!-- Filters Sidebar -->
-                <div class="col-lg-3 col-md-4">
-                    <div class="filter-sidebar" data-aos="fade-right">
-                        <button class="filter-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#filterContent">
-                            Filters
-                        </button>
-                        <div class="filter-content collapse" id="filterContent">
-                            <h3>Filters</h3>
-                            <div class="filter-group">
-                                <label>Category</label>
-                                <select class="form-select">
-                                    <option>All</option>
-                                    <option>Hoodies</option>
-                                    <option>T-Shirts</option>
-                                    <option>Pants</option>
-                                    <option>Accessories</option>
-                                </select>
-                            </div>
-                            <div class="filter-group">
-                                <label>Price Range</label>
-                                <input type="range" class="form-range" min="0" max="200" step="10" value="200">
-                                <div class="d-flex justify-content-between">
-                                    <span>$0</span>
-                                    <span>$200</span>
-                                </div>
-                            </div>
-                            <div class="filter-group">
-                                <label>Size</label>
-                                <div class="size-filter">
-                                    <div><input type="checkbox" id="size-s"> <label for="size-s">S</label></div>
-                                    <div><input type="checkbox" id="size-m"> <label for="size-m">M</label></div>
-                                    <div><input type="checkbox" id="size-l"> <label for="size-l">L</label></div>
-                                    <div><input type="checkbox" id="size-xl"> <label for="size-xl">XL</label></div>
-                                </div>
-                            </div>
-                            <div class="filter-group">
-                                <label>Color</label>
-                                <div class="color-filter">
-                                    <div><input type="checkbox" id="color-black"> <label for="color-black">Black</label></div>
-                                    <div><input type="checkbox" id="color-grey"> <label for="color-grey">Grey</label></div>
-                                    <div><input type="checkbox" id="color-white"> <label for="color-white">White</label></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <!-- Product Grid -->
-                <div class="col-lg-9 col-md-8">
-                    <div class="row">
-                        <div class="col-6 col-md-4 col-sm-6 mb-4" data-aos="fade-up" data-aos-delay="100">
-                            <div class="product-card" data-name="Hoodie Alpha" data-price="89.99">
-                                <img src="JAZ_5029 1.jpg" alt="Hoodie Alpha">
-                                <div class="product-overlay">
-                                    <h5>Hoodie Alpha</h5>
-                                    <p>$89.99</p>
-                                    <a href="#" class="btn btn-add-to-cart" onclick="addToCart('Hoodie Alpha', 89.99)">Add to Cart</a>
-                                </div>
-                                <div class="product-info">
-                                    <h5>Hoodie Alpha</h5>
-                                    <p>$89.99</p>
-                                    <a href="#" class="btn btn-add-to-cart" onclick="addToCart('Hoodie Alpha', 89.99)">Add to Cart</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 col-md-4 col-sm-6 mb-4" data-aos="fade-up" data-aos-delay="200">
-                            <div class="product-card" data-name="Street Tee" data-price="49.99">
-                                <img src="JAZ_5044 1.jpg" alt="Street Tee">
-                                <div class="product-overlay">
-                                    <h5>Street Tee</h5>
-                                    <p>$49.99</p>
-                                    <a href="#" class="btn btn-add-to-cart" onclick="addToCart('Street Tee', 49.99)">Add to Cart</a>
-                                </div>
-                                <div class="product-info">
-                                    <h5>Street Tee</h5>
-                                    <p>$49.99</p>
-                                    <a href="#" class="btn btn-add-to-cart" onclick="addToCart('Street Tee', 49.99)">Add to Cart</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 col-md-4 col-sm-6 mb-4" data-aos="fade-up" data-aos-delay="300">
-                            <div class="product-card" data-name="Cargo Pants" data-price="79.99">
-                                <img src="JAZ_5036.jpg" alt="Cargo Pants">
-                                <div class="product-overlay">
-                                    <h5>Cargo Pants</h5>
-                                    <p>$79.99</p>
-                                    <a href="#" class="btn btn-add-to-cart" onclick="addToCart('Cargo Pants', 79.99)">Add to Cart</a>
-                                </div>
-                                <div class="product-info">
-                                    <h5>Cargo Pants</h5>
-                                    <p>$79.99</p>
-                                    <a href="#" class="btn btn-add-to-cart" onclick="addToCart('Cargo Pants', 79.99)">Add to Cart</a>
+                <div class="col-12">
+                    <div class="row" id="productGrid">
+                        {% for product in products %}
+                            <div class="col-6 col-md-4 col-sm-6 mb-4 product-item" 
+                                data-aos="fade-up" 
+                                data-aos-delay="{% cycle '100' '200' '300' '400' '500' '600' %}"
+                                data-name="{{ product.name|lower|default:'' }}"
+                                data-category="{{ product.category.name|lower|default:'' }}">
+                                <div class="product-card">
+                                    {% with product.images.first as image %}
+                                        {% if image %}
+                                            <img src="{{ image.image.url }}" alt="{{ product.name|default:'Product' }}">
+                                        {% else %}
+                                            <img src="{% static 'images/placeholder.jpg' %}" alt="{{ product.name|default:'Product' }}">
+                                        {% endif %}
+                                    {% endwith %}
+                                    <div class="product-overlay">
+                                        <h5>{{ product.name|default:'Unnamed Product' }}</h5>
+                                        <p>₦{{ product.price|default:0 }}</p>
+                                        <a href="{% url 'product_detail' product.id %}" class="btn btn-add-to-cart" 
+                                       >Add to Cart</a>
+                                    </div>
+                                    <div class="product-info">
+                                        <h5>{{ product.name|default:'Unnamed Product' }}</h5>
+                                        <p>₦{{ product.price|default:0 }}</p>
+                                        <a href="{% url 'product_detail' product.id %}" class="btn btn-add-to-cart" 
+                                       >Add to Cart</a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-6 col-md-4 col-sm-6 mb-4" data-aos="fade-up" data-aos-delay="400">
-                            <div class="product-card" data-name="Jacket Elite" data-price="99.99">
-                                <img src="JAZ_5058 1.jpg" alt="Jacket Elite">
-                                <div class="product-overlay">
-                                    <h5>Jacket Elite</h5>
-                                    <p>$99.99</p>
-                                    <a href="#" class="btn btn-add-to-cart" onclick="addToCart('Jacket Elite', 99.99)">Add to Cart</a>
-                                </div>
-                                <div class="product-info">
-                                    <h5>Jacket Elite</h5>
-                                    <p>$99.99</p>
-                                    <a href="#" class="btn btn-add-to-cart" onclick="addToCart('Jacket Elite', 99.99)">Add to Cart</a>
-                                </div>
+                        {% empty %}
+                            <div class="col-12">
+                                <p>No products found. Try adjusting your search or adding products to the database.</p>
                             </div>
-                        </div>
-                        <div class="col-6 col-md-4 col-sm-6 mb-4" data-aos="fade-up" data-aos-delay="500">
-                            <div class="product-card" data-name="Snapback Cap" data-price="39.99">
-                                <img src="JAZ_5023 1.jpg" alt="Snapback Cap">
-                                <div class="product-overlay">
-                                    <h5>Snapback Cap</h5>
-                                    <p>$39.99</p>
-                                    <a href="#" class="btn btn-add-to-cart" onclick="addToCart('Snapback Cap', 39.99)">Add to Cart</a>
-                                </div>
-                                <div class="product-info">
-                                    <h5>Snapback Cap</h5>
-                                    <p>$39.99</p>
-                                    <a href="#" class="btn btn-add-to-cart" onclick="addToCart('Snapback Cap', 39.99)">Add to Cart</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 col-md-4 col-sm-6 mb-4" data-aos="fade-up" data-aos-delay="600">
-                            <div class="product-card" data-name="Hoodie Beta" data-price="94.99">
-                                <img src="JAZ_5029 1.jpg" alt="Hoodie Beta">
-                                <div class="product-overlay">
-                                    <h5>Hoodie Beta</h5>
-                                    <p>$94.99</p>
-                                    <a href="#" class="btn btn-add-to-cart" onclick="addToCart('Hoodie Beta', 94.99)">Add to Cart</a>
-                                </div>
-                                <div class="product-info">
-                                    <h5>Hoodie Beta</h5>
-                                    <p>$94.99</p>
-                                    <a href="#" class="btn btn-add-to-cart" onclick="addToCart('Hoodie Beta', 94.99)">Add to Cart</a>
-                                </div>
-                            </div>
-                        </div>
+                        {% endfor %}
                     </div>
                     <!-- Pagination -->
                     <nav aria-label="Product pagination">
                         <ul class="pagination">
-                            <li class="page-item">
-                                <a class="page-link" href="#" aria-label="Previous">
-                                    <span aria-hidden="true">«</span>
-                                </a>
-                            </li>
-                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item">
-                                <a class="page-link" href="#" aria-label="Next">
-                                    <span aria-hidden="true">»</span>
-                                </a>
-                            </li>
+                            {% if products.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ products.previous_page_number }}&search={{ search_query|urlencode }}" aria-label="Previous">
+                                        <span aria-hidden="true">«</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+                            {% for num in products.paginator.page_range %}
+                                <li class="page-item {% if products.number == num %}active{% endif %}">
+                                    <a class="page-link" href="?page={{ num }}&search={{ search_query|urlencode }}">{{ num }}</a>
+                                </li>
+                            {% endfor %}
+                            {% if products.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ products.next_page_number }}&search={{ search_query|urlencode }}" aria-label="Next">
+                                        <span aria-hidden="true">»</span>
+                                    </a>
+                                </li>
+                            {% endif %}
                         </ul>
                     </nav>
                 </div>
@@ -559,9 +478,9 @@
                 <div class="col-md-4 mb-3">
                     <h5>Follow Us</h5>
                     <div class="social-icons">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-tiktok"></i></a>
+                        <a href="https://www.instagram.com/suxesluxthread?igsh=Y2N1aGhtd3M2Zm0w" target="_blank" ><i class="fab fa-instagram"></i></a>
+                        <a href="https://x.com/suxesluxthread?s=09" target="_blank" ><i class="fab fa-twitter"></i></a>
+                        <a href="https://vm.tiktok.com/ZMSMBxJxd/"  target="_blank"><i class="fab fa-tiktok"></i></a>
                     </div>
                 </div>
             </div>
@@ -572,6 +491,47 @@
             </div>
         </div>
     </footer>
+
+    <!-- JavaScript for Client-Side Search -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            const productItems = document.querySelectorAll('.product-item');
+            const searchForm = document.getElementById('searchForm');
+
+            function filterProducts() {
+                const searchTerm = searchInput.value.toLowerCase();
+                let visibleCount = 0;
+
+                productItems.forEach(item => {
+                    const name = item.dataset.name || '';
+                    const category = item.dataset.category || '';
+
+                    if (name.includes(searchTerm) || category.includes(searchTerm)) {
+                        item.style.display = 'block';
+                        visibleCount++;
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+                console.log(`Visible products: ${visibleCount}`);
+            }
+
+            // Event listeners for client-side search
+            searchInput.addEventListener('input', filterProducts);
+
+            // Submit form on Enter key
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    searchForm.submit();
+                }
+            });
+
+            // Initial filter
+            filterProducts();
+        });
+    </script>
 
     <!-- Bootstrap JS and Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

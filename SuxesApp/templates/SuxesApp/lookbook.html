@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,13 +9,13 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- AOS for animations -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <!-- Google Fonts (Montserrat for bold, urban typography) -->
-    <link href="https://fonts.googleapis.comcss2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- Google Fonts (Poppins for elegant, modern typography) -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
-            font-family: 'Montserrat', sans-serif;
+            font-family: 'Poppins', sans-serif;
             background-color: #fff;
             color: #000;
             overflow-x: hidden;
@@ -286,11 +287,11 @@
     <!-- Sticky Navbar -->
     <nav class="navbar navbar-expand-lg">
         <div class="container">
-            <a class="navbar-brand" href="index.html">
-                <img src="LOGO ISOTYOE WHITE.png" alt="SuXeS Lux Thread Logo">
+            <a class="navbar-brand" href="#">
+                <img src="{% static 'images/LOGO  ISOTYOE WHITE.png' %}" style="width: 60px;" alt="SuXeS Lux Thread Logo">
                 <span>SuXeS Lux Thread</span>
             </a>
-            <a href="cart.html" class="cart-mobile">
+            <a href="#cart" class="cart-mobile">
                 <i class="fas fa-shopping-cart"></i>
                 <span class="cart-count" id="cartCountMobile">0</span>
             </a>
@@ -300,30 +301,36 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html#home">Home</a>
+                        <a class="nav-link" href="{% url 'home' %}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html#shop">Shop</a>
+                        <a class="nav-link" href="{% url 'shop' %}">Shop</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="lookbook.html">Lookbook</a>
+                        <a class="nav-link" href="{% url 'lookbook' %}">Lookbook</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="about.html">About</a>
+                        <a class="nav-link" href="{% url 'about' %}">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="contact.html">Contact</a>
+                        <a class="nav-link" href="{% url 'contact' %}">Contact</a>
                     </li>
                 </ul>
                 <div class="navbar-icons ms-3">
-                    <a href="cart.html" class="cart-icon">
+                    <a href="{% url 'cart' %}" class="cart-icon">
                         <i class="fas fa-shopping-cart"></i>
                         <span class="cart-count" id="cartCount">0</span>
                     </a>
-                    <a href="account.html" class="profile-icon">
+                    <a href="{% url 'profile' %}" class="profile-icon">
                         <i class="fas fa-user"></i>
                     </a>
-                    <a href="login.html" class="btn btn-login">Login</a>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'logout_user' %}" class="btn btn-login" title="Logout">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </a>
+                    {% else %}
+                        <a href="{% url 'login_user' %}" class="btn btn-login">Login</a>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -333,7 +340,7 @@
     <section class="lookbook-section">
         <!-- Hero Section -->
         <div class="hero-section" data-aos="fade-in">
-            <img src="JAZ_5029 1.jpg" alt="Lookbook Hero" class="hero-image">
+            <img src="{% static 'images/JAZ_5082 1.psd BK.jpg' %}" alt="Lookbook Hero" class="hero-image">
             <div class="hero-overlay">
                 <h1>Forever Relentless</h1>
                 <p>Spring 2025 Collection: Where urban grit meets timeless luxury.</p>
@@ -352,30 +359,22 @@
         <div class="lookbook-grid" data-aos="fade-up" data-aos-delay="100">
             <div class="container">
                 <div class="row">
-                    <div class="col-md-6 lookbook-item">
-                        <img src="JAZ_5044 1.jpg" alt="Look 1">
-                        <h3>Urban Edge</h3>
-                        <p>Oversized silhouettes and heavyweight fabrics designed for the city’s relentless pace.</p>
-                        <a href="shop.html" class="btn btn-shop-now">Shop Now</a>
-                    </div>
-                    <div class="col-md-6 lookbook-item">
-                        <img src="JAZ_5036.jpg" alt="Look 2">
-                        <h3>Street Royalty</h3>
-                        <p>Elevated streetwear with refined details, fit for those who rule the streets.</p>
-                        <a href="shop.html" class="btn btn-shop-now">Shop Now</a>
-                    </div>
-                    <div class="col-md-6 lookbook-item">
-                        <img src="JAZ_5023 1.jpg" alt="Look 3">
-                        <h3>Modern Grit</h3>
-                        <p>Built for the grind, with durable designs that never compromise on style.</p>
-                        <a href="shop.html" class="btn btn-shop-now">Shop Now</a>
-                    </div>
-                    <div class="col-md-6 lookbook-item">
-                        <img src="JAZ_5058 1.jpg" alt="Look 4">
-                        <h3>Luxury Rebellion</h3>
-                        <p>Defiant and bold, for those who rewrite the rules with every step.</p>
-                        <a href="shop.html" class="btn btn-shop-now">Shop Now</a>
-                    </div>
+                    {% for category in categories %}
+                        <div class="col-md-6 lookbook-item">
+                            {% if category.image %}
+                                <img src="{{ category.image.url }}" alt="{{ category.name }}">
+                            {% else %}
+                                <img src="{% static 'images/placeholder.png' %}" alt="No image available">
+                            {% endif %}
+                            <h3>{{ category.name }}</h3>
+                            <p>{{ category.description }}</p>
+                            <a href="{% url 'shop' %}" class="btn btn-shop-now">Shop Now</a>
+                        </div>
+                    {% empty %}
+                        <div class="col-12 text-center">
+                            <p>No categories found.</p>
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
@@ -410,9 +409,9 @@
                 <div class="col-md-4 mb-3">
                     <h5>Follow Us</h5>
                     <div class="social-icons">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-tiktok"></i></a>
+                        <a href="https://www.instagram.com/suxesluxthread?igsh=Y2N1aGhtd3M2Zm0w" target="_blank" ><i class="fab fa-instagram"></i></a>
+                        <a href="https://x.com/suxesluxthread?s=09" target="_blank" ><i class="fab fa-twitter"></i></a>
+                        <a href="https://vm.tiktok.com/ZMSMBxJxd/"  target="_blank"><i class="fab fa-tiktok"></i></a>
                     </div>
                 </div>
             </div>

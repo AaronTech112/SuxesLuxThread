@@ -12,6 +12,8 @@ import uuid
 import requests
 from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
+from django.core.paginator import Paginator
+from django.db.models import Q
 
 # Create your views here.
 def home(request):
@@ -24,18 +26,37 @@ def home(request):
     return render(request, 'SuxesApp/index.html', context)
 
 def shop(request):
-    category_id = request.GET.get('category')
+    # Get search query
+    search_query = request.GET.get('search', '')
+
+    # Base queryset
     products = Product.objects.filter(is_active=True)
-    if category_id and category_id != 'all':
-        products = products.filter(category_id=category_id)
+
+    # Debug: Print queryset count
+    print(f"Active products before filtering: {products.count()}")
+
+    # Apply search filter
+    if search_query:
+        products = products.filter(
+            Q(name__icontains=search_query) | Q(category__name__icontains=search_query)
+        ).distinct()
+        print(f"Products after search filter ({search_query}): {products.count()}")
+
+    # Order products
     products = products.order_by('name')
-    categories = Category.objects.all()
+
+    # Pagination
+    paginator = Paginator(products, 6)  # 6 products per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     context = {
-        'products': products,
-        'categories': categories,
+        'products': page_obj,
+        'search_query': search_query,
         'cart_count': cart_item_count(request)['cart_count'],
     }
     return render(request, 'SuxesApp/shop.html', context)
+
 
 @login_required(login_url='/login_user')
 def checkout(request):
@@ -314,30 +335,43 @@ def remove_from_cart(request, item_id):
     messages.success(request, f"{cart_item.product.name} removed from cart!")
     return redirect('cart')
 
-# views.py
+
 @login_required(login_url='/login_user')
 def order_detail(request, transaction_id):
+    # Fetch the transaction for the authenticated user
     transaction = get_object_or_404(Transaction, id=transaction_id, user=request.user)
-    categories = Category.objects.all()
-    cart_count = Cart.objects.get(user=request.user).items.count() if request.user.is_authenticated else 0
+
+    # Fetch cart items for the user (assuming cart was used for transaction)
+    try:
+        cart = Cart.objects.get(user=request.user)
+        cart_items = cart.items.filter(product__in=transaction.products.all())
+    except Cart.DoesNotExist:
+        cart_items = []
+
+    # Calculate cart count
+    cart_count = cart.items.count() if Cart.objects.filter(user=request.user).exists() else 0
 
     context = {
         'transaction': transaction,
-        'categories': categories,
+        'cart_items': cart_items,
         'cart_count': cart_count,
     }
     return render(request, 'SuxesApp/order_detail.html', context)
 
 def profile(request):
-    categories = Category.objects.all()
     if not request.user.is_authenticated:
         return redirect('login_user')
+
     # Fetch user-related data
     user = request.user
+    # Fetch user's transactions (order history)
+    transactions = Transaction.objects.filter(user=user).order_by('-transaction_date')
+
     context = {
         'user': user,
-        'categories': categories,
-        'address': user.address if hasattr(user, 'address') else None,
+        'address': user.address if hasattr(user, 'address') and user.address else None,
+        'transactions': transactions,
+        'cart_count': cart_item_count(request)['cart_count'],
     }
     return render(request, 'SuxesApp/profile.html', context)
 

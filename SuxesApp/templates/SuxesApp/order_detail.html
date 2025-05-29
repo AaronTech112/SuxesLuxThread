@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -304,13 +305,13 @@
     <!-- Sticky Navbar -->
     <nav class="navbar navbar-expand-lg">
         <div class="container">
-            <a class="navbar-brand" href="index.html">
-                <img src="assets/images/LOGO ISOTYOE WHITE.png" alt="SuXeS Lux Thread Logo">
+            <a class="navbar-brand" href="#">
+                <img src="{% static 'images/LOGO  ISOTYOE WHITE.png' %}" style="width: 60px;" alt="SuXeS Lux Thread Logo">
                 <span>SuXeS Lux Thread</span>
             </a>
-            <a href="cart.html" class="cart-mobile">
+            <a href="#cart" class="cart-mobile">
                 <i class="fas fa-shopping-cart"></i>
-                <span class="cart-count">4</span>
+                <span class="cart-count" id="cartCountMobile">0</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -318,34 +319,41 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html#home">Home</a>
+                        <a class="nav-link" href="{% url 'home' %}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html#shop">Shop</a>
+                        <a class="nav-link" href="{% url 'shop' %}">Shop</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="lookbook.html">Lookbook</a>
+                        <a class="nav-link" href="{% url 'lookbook' %}">Lookbook</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="about.html">About</a>
+                        <a class="nav-link" href="{% url 'about' %}">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="contact.html">Contact</a>
+                        <a class="nav-link" href="{% url 'contact' %}">Contact</a>
                     </li>
                 </ul>
                 <div class="navbar-icons ms-3">
-                    <a href="cart.html" class="cart-icon">
+                    <a href="{% url 'cart' %}" class="cart-icon">
                         <i class="fas fa-shopping-cart"></i>
-                        <span class="cart-count">4</span>
+                        <span class="cart-count" id="cartCount">0</span>
                     </a>
-                    <a href="profile.html" class="profile-icon">
+                    <a href="{% url 'profile' %}" class="profile-icon">
                         <i class="fas fa-user"></i>
                     </a>
-                    <a href="login.html" class="btn btn-login">Logout</a>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'logout_user' %}" class="btn btn-login" title="Logout">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </a>
+                    {% else %}
+                        <a href="{% url 'login_user' %}" class="btn btn-login">Login</a>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </nav>
+
 
     <!-- Hero Section -->
     <section class="order-hero" data-aos="fade-up">
@@ -357,41 +365,69 @@
     <!-- Order Section -->
     <section class="order-section">
         <div class="container">
-            <h2 data-aos="fade-up">Order #SLX123456</h2>
+            <h2 data-aos="fade-up">Order #{{ transaction.tx_ref }}</h2>
             <div class="order-info" data-aos="fade-up" data-aos-delay="100">
                 <h3>Order Summary</h3>
-                <p><strong>Order Date:</strong> May 20, 2025</p>
-                <p><strong>Status:</strong> Shipped</p>
-                <p><strong>Shipping Address:</strong> 123 Urban Street, New York, NY 10001, USA</p>
+                <p><strong>Order Date:</strong> {{ transaction.transaction_date|date:"F d, Y" }}</p>
+                <p><strong>Status:</strong> {{ transaction.get_transaction_status_display }}</p>
+                <p><strong>Shipping Address:</strong> 
+                    {% if transaction.address %}
+                        {{ transaction.address.street|default:'' }}{% if transaction.address.street %}, {% endif %}
+                        {{ transaction.address.city|default:'' }}{% if transaction.address.city %}, {% endif %}
+                        {{ transaction.address.state|default:'' }}{% if transaction.address.state %}, {% endif %}
+                        {{ transaction.address.postal_code|default:'' }}{% if transaction.address.postal_code %}, {% endif %}
+                        {{ transaction.address.country|default:'Not provided' }}
+                    {% else %}
+                        Not provided
+                    {% endif %}
+                </p>
             </div>
             <div class="order-items" data-aos="fade-up" data-aos-delay="200">
                 <h3>Items</h3>
-                <div class="order-item">
-                    <img src="assets/images/JAZ_5023 1.jpg" alt="Oversized Tee">
-                    <div class="order-item-details">
-                        <h5>Oversized Tee</h5>
-                        <p>Size: M</p>
-                        <p>Quantity: 1</p>
-                        <p>Price: $45.00</p>
+                {% for item in cart_items %}
+                    <div class="order-item">
+                        {% with item.product.images.first as image %}
+                            {% if image %}
+                                <img src="{{ image.image.url }}" alt="{{ item.product.name|default:'Product' }}">
+                            {% else %}
+                                <img src="{% static 'images/placeholder.jpg' %}" alt="{{ item.product.name|default:'Product' }}">
+                            {% endif %}
+                        {% endwith %}
+                        <div class="order-item-details">
+                            <h5>{{ item.product.name|default:'Unnamed Product' }}</h5>
+                            <p>Size: {{ item.size.name|default:'Not specified' }}</p>
+                            <p>Quantity: {{ item.quantity }}</p>
+                            <p>Price: ₦{{ item.total_price|floatformat:2 }}</p>
+                        </div>
                     </div>
-                </div>
-                <div class="order-item">
-                    <img src="assets/images/JAZ_5044 1.jpg" alt="Cargo Pants">
-                    <div class="order-item-details">
-                        <h5>Cargo Pants</h5>
-                        <p>Size: L</p>
-                        <p>Quantity: 2</p>
-                        <p>Price: $65.00</p>
-                    </div>
-                </div>
+                {% empty %}
+                    {% for product in transaction.products.all %}
+                        <div class="order-item">
+                            {% with product.images.first as image %}
+                                {% if image %}
+                                    <img src="{{ image.image.url }}" alt="{{ product.name|default:'Product' }}">
+                                {% else %}
+                                    <img src="{% static 'images/placeholder.jpg' %}" alt="{{ product.name|default:'Product' }}">
+                                {% endif %}
+                            {% endwith %}
+                            <div class="order-item-details">
+                                <h5>{{ product.name|default:'Unnamed Product' }}</h5>
+                                <p>Size: Not specified</p>
+                                <p>Quantity: Not available</p>
+                                <p>Price: ₦{{ product.price|floatformat:2 }}</p>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div class="order-item">
+                            <p>No items found for this order.</p>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
                 <div class="order-summary">
-                    <p>Subtotal: $175.00</p>
-                    <p>Shipping: $10.00</p>
-                    <p>Tax: $17.50</p>
-                    <p><strong>Total: $202.50</strong></p>
+                    <p><strong>Total: ₦{{ transaction.amount|floatformat:2 }}</strong></p>
                 </div>
             </div>
-            <a href="profile.html" class="btn btn-back mt-4" data-aos="fade-up" data-aos-delay="300">Back to Profile</a>
+            <a href="{% url 'profile' %}" class="btn btn-back mt-4" data-aos="fade-up" data-aos-delay="300">Back to Profile</a>
         </div>
     </section>
 
@@ -415,9 +451,9 @@
                 <div class="col-md-4 mb-4">
                     <h5>Follow Us</h5>
                     <div class="social-icons">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-tiktok"></i></a>
+                        <a href="https://www.instagram.com/suxesluxthread?igsh=Y2N1aGhtd3M2Zm0w" target="_blank" ><i class="fab fa-instagram"></i></a>
+                        <a href="https://x.com/suxesluxthread?s=09" target="_blank" ><i class="fab fa-twitter"></i></a>
+                        <a href="https://vm.tiktok.com/ZMSMBxJxd/"  target="_blank"><i class="fab fa-tiktok"></i></a>
                     </div>
                 </div>
             </div>

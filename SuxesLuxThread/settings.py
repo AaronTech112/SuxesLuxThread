@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'SuxesApp',
-    
+
 ]
 
 MIDDLEWARE = [
@@ -124,7 +124,7 @@ STATIC_URL = 'static/'
 STATIC_FILES_DIR = os.path.join(BASE_DIR, 'static')
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-MEDIA_URL = 'img/'
+MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 
@@ -136,10 +136,10 @@ AUTH_USER_MODEL = 'SuxesApp.CustomUser'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-from decouple import config
 
-FLUTTERWAVE_PUBLIC_KEY = config('FLUTTERWAVE_PUBLIC_KEY')
-FLUTTERWAVE_SECRET_KEY = config('FLUTTERWAVE_SECRET_KEY')
+
+FLUTTERWAVE_PUBLIC_KEY = 'FLWPUBK_TEST-5d19f5091bfb069566be7aee06028b99-X'
+FLUTTERWAVE_SECRET_KEY = 'FLWSECK_TEST-859e278cae6e19a049215799aeec9dc4-X'
 
 
 BASE_URL = "http://http://127.0.0.1:8000/"

@@ -310,11 +310,9 @@
                 <img src="{% static 'images/LOGO  ISOTYOE WHITE.png' %}" style="width: 60px;" alt="SuXeS Lux Thread Logo">
                 <span>SuXeS Lux Thread</span>
             </a>
-            <a href="{% url 'cart' %}" class="cart-mobile">
+            <a href="#cart" class="cart-mobile">
                 <i class="fas fa-shopping-cart"></i>
-                {% if cart_count > 0 %}
-                <span class="cart-count" id="cartCountMobile">{{ cart_count }}</span>
-                {% endif %}
+                <span class="cart-count" id="cartCountMobile">0</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -340,9 +338,7 @@
                 <div class="navbar-icons ms-3">
                     <a href="{% url 'cart' %}" class="cart-icon">
                         <i class="fas fa-shopping-cart"></i>
-                        {% if cart_count > 0 %}
-                        <span class="cart-count" id="cartCount">{{ cart_count }}</span>
-                        {% endif %}
+                        <span class="cart-count" id="cartCount">0</span>
                     </a>
                     <a href="{% url 'profile' %}" class="profile-icon">
                         <i class="fas fa-user"></i>
@@ -358,6 +354,7 @@
             </div>
         </div>
     </nav>
+
 
     
     <!-- Product Detail Section -->
@@ -384,7 +381,7 @@
                 <!-- Product Details -->
                 <div class="col-md-6 product-details">
                     <h1>{{ product.name }}</h1>
-                    <p class="price">${{ product.price }}</p>
+                    <p class="price">₦{{ product.price }}</p>
                     <div class="size-selector">
                         <label>Size</label>
                         {% for size in available_sizes %}
@@ -488,7 +485,7 @@
                                 </h2>
                                 <div id="shippingInfo" class="accordion-collapse collapse show" data-bs-parent="#shippingAccordion">
                                     <div class="accordion-body">
-                                        Free standard shipping on orders over $100. Orders ship within 2-3 business days. International shipping available.
+                                    Orders ship within 2-3 business days. International shipping available.
                                     </div>
                                 </div>
                             </div>
@@ -562,9 +559,9 @@
                 <div class="col-md-4 mb-3">
                     <h5>Follow Us</h5>
                     <div class="social-icons">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-tiktok"></i></a>
+                        <a href="https://www.instagram.com/suxesluxthread?igsh=Y2N1aGhtd3M2Zm0w" target="_blank" ><i class="fab fa-instagram"></i></a>
+                        <a href="https://x.com/suxesluxthread?s=09" target="_blank" ><i class="fab fa-twitter"></i></a>
+                        <a href="https://vm.tiktok.com/ZMSMBxJxd/"  target="_blank"><i class="fab fa-tiktok"></i></a>
                     </div>
                 </div>
             </div>

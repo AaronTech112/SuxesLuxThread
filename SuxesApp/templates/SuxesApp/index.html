@@ -412,7 +412,7 @@
         <div class="hero-content" data-aos="fade-up">
             <h1>SuXeS Lux Thread</h1>
             <p>Forever Relentless.</p>
-            <a href="#shop" class="btn btn-shop">Shop Now</a>
+            <a href="{% url 'shop' %}" class="btn btn-shop">Shop Now</a>
         </div>
     </section>
 
@@ -423,7 +423,7 @@
                 <div class="col-md-6" data-aos="fade-right">
                     <h2>Our Story</h2>
                     <p>SuXeS Lux Thread is born from the grind—blending high-end aesthetics with the raw edge of street culture. We’re for the dreamers, the doers, the relentless. Every piece we craft is a statement of ambition, designed for those who rise from nothing and shine in style.</p>
-                    <a href="#about" class="btn btn-shop">Learn More</a>
+                    <a href="{% url 'shop' %}" class="btn btn-shop">Learn More</a>
                 </div>
                 <div class="col-md-6" data-aos="fade-left">
                     <img src="{% static 'images/JAZ_5082 1.psd BK.jpg' %}" alt="Brand Story Image" class="img-fluid">
@@ -483,7 +483,7 @@
                         {% endif %}
                         <div class="product-overlay">
                             <h5>{{ product.name }}</h5>
-                            <p>${{ product.price }}</p>
+                            <p>₦{{ product.price }}</p>
                             <a href="{% url 'product_detail' product.id %}" class="btn btn-sm btn-shop">Add to Cart</a>
                         </div>
                     </div>
@@ -527,10 +527,7 @@
         <div class="container">
             <h2 data-aos="fade-up">Stay in the Loop</h2>
             <p data-aos="fade-up" data-aos-delay="100">Get the latest drops and exclusive offers.</p>
-            <form class="d-flex justify-content-center" data-aos="fade-up" data-aos-delay="200">
-                <input type="email" class="form-control w-50 me-2" placeholder="Enter your email" required>
-                <button type="submit" class="btn">Subscribe</button>
-            </form>
+
         </div>
     </section>
 
@@ -554,9 +551,9 @@
                 <div class="col-md-4 mb-3">
                     <h5>Follow Us</h5>
                     <div class="social-icons">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-tiktok"></i></a>
+                        <a href="https://www.instagram.com/suxesluxthread?igsh=Y2N1aGhtd3M2Zm0w" target="_blank" ><i class="fab fa-instagram"></i></a>
+                        <a href="https://x.com/suxesluxthread?s=09" target="_blank" ><i class="fab fa-twitter"></i></a>
+                        <a href="https://vm.tiktok.com/ZMSMBxJxd/"  target="_blank"><i class="fab fa-tiktok"></i></a>
                     </div>
                 </div>
             </div>

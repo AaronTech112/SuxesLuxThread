@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -292,11 +293,11 @@
     <!-- Sticky Navbar -->
     <nav class="navbar navbar-expand-lg">
         <div class="container">
-            <a class="navbar-brand" href="index.html">
-                <img src="LOGO ISOTYOE WHITE.png" alt="SuXeS Lux Thread Logo">
+            <a class="navbar-brand" href="#">
+                <img src="{% static 'images/LOGO  ISOTYOE WHITE.png' %}" style="width: 60px;" alt="SuXeS Lux Thread Logo">
                 <span>SuXeS Lux Thread</span>
             </a>
-            <a href="cart.html" class="cart-mobile">
+            <a href="#cart" class="cart-mobile">
                 <i class="fas fa-shopping-cart"></i>
                 <span class="cart-count" id="cartCountMobile">0</span>
             </a>
@@ -306,40 +307,47 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html#home">Home</a>
+                        <a class="nav-link" href="{% url 'home' %}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html#shop">Shop</a>
+                        <a class="nav-link" href="{% url 'shop' %}">Shop</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="lookbook.html">Lookbook</a>
+                        <a class="nav-link" href="{% url 'lookbook' %}">Lookbook</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="about.html">About</a>
+                        <a class="nav-link" href="{% url 'about' %}">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="contact.html">Contact</a>
+                        <a class="nav-link" href="{% url 'contact' %}">Contact</a>
                     </li>
                 </ul>
                 <div class="navbar-icons ms-3">
-                    <a href="cart.html" class="cart-icon">
+                    <a href="{% url 'cart' %}" class="cart-icon">
                         <i class="fas fa-shopping-cart"></i>
                         <span class="cart-count" id="cartCount">0</span>
                     </a>
-                    <a href="account.html" class="profile-icon">
+                    <a href="{% url 'profile' %}" class="profile-icon">
                         <i class="fas fa-user"></i>
                     </a>
-                    <a href="login.html" class="btn btn-login">Login</a>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'logout_user' %}" class="btn btn-login" title="Logout">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </a>
+                    {% else %}
+                        <a href="{% url 'login_user' %}" class="btn btn-login">Login</a>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </nav>
 
+
     <!-- About Section -->
     <section class="about-section">
         <!-- Hero Section -->
         <div class="hero-section" data-aos="fade-in">
-            <img src="JAZ_5058 1.jpg" alt="About Hero" class="hero-image">
+            <img src="{% static 'images/JAZ_5107 1.psd BK.jpg' %}" alt="About Hero" class="hero-image">
             <div class="hero-overlay">
                 <h1>Forever Relentless</h1>
             </div>
@@ -354,7 +362,7 @@
                         <p>SuXeS Lux Thread is a Streetwear clothing brand that comes from a fusion of “success, luxury, and street culture. SuXeS Lux Thread is a streetwear brand that blends high-end aesthetics with an urban edge—representing ambition, style, and the relentless drive to achieve greatness. The inducement stems from personal Struggles and the belief in rising from nothing— We are for the driven. The ones who work in silence and shine in style. Entrepreneurs, creators, dreamers, and doers who know that looking like success is part of becoming it. We blend refined, high-end design with the raw authenticity of the streets. Every piece is crafted to represent ambition — not just as a goal, but as a lifestyle. Using bold visuals, disciplined detail, and a black-and-white identity, SuXeS Lux Thread delivers a statement: Forever Relentless.</p>
                     </div>
                     <div class="col-md-6">
-                        <img src="JAZ_5044 1.jpg" alt="Brand Story" class="story-image">
+                        <img src="{% static 'images/JAZ_5070 1.psd BK.jpg' %}" alt="Brand Story" class="story-image">
                     </div>
                 </div>
             </div>
@@ -423,10 +431,11 @@
                 </div>
                 <div class="col-md-4 mb-3">
                     <h5>Follow Us</h5>
+
                     <div class="social-icons">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-tiktok"></i></a>
+                        <a href="https://www.instagram.com/suxesluxthread?igsh=Y2N1aGhtd3M2Zm0w" target="_blank" ><i class="fab fa-instagram"></i></a>
+                        <a href="https://x.com/suxesluxthread?s=09" target="_blank" ><i class="fab fa-twitter"></i></a>
+                        <a href="https://vm.tiktok.com/ZMSMBxJxd/"  target="_blank"><i class="fab fa-tiktok"></i></a>
                     </div>
                 </div>
             </div>

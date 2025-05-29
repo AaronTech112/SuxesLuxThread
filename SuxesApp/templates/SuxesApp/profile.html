@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -309,13 +310,13 @@
     <!-- Sticky Navbar -->
     <nav class="navbar navbar-expand-lg">
         <div class="container">
-            <a class="navbar-brand" href="index.html">
-                <img src="assets/images/LOGO ISOTYOE WHITE.png" alt="SuXeS Lux Thread Logo">
+            <a class="navbar-brand" href="#">
+                <img src="{% static 'images/LOGO  ISOTYOE WHITE.png' %}" style="width: 60px;" alt="SuXeS Lux Thread Logo">
                 <span>SuXeS Lux Thread</span>
             </a>
-            <a href="cart.html" class="cart-mobile">
+            <a href="#cart" class="cart-mobile">
                 <i class="fas fa-shopping-cart"></i>
-                <span class="cart-count">4</span>
+                <span class="cart-count" id="cartCountMobile">0</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -323,34 +324,41 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html#home">Home</a>
+                        <a class="nav-link" href="{% url 'home' %}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html#shop">Shop</a>
+                        <a class="nav-link" href="{% url 'shop' %}">Shop</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="lookbook.html">Lookbook</a>
+                        <a class="nav-link" href="{% url 'lookbook' %}">Lookbook</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="about.html">About</a>
+                        <a class="nav-link" href="{% url 'about' %}">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="contact.html">Contact</a>
+                        <a class="nav-link" href="{% url 'contact' %}">Contact</a>
                     </li>
                 </ul>
                 <div class="navbar-icons ms-3">
-                    <a href="cart.html" class="cart-icon">
+                    <a href="{% url 'cart' %}" class="cart-icon">
                         <i class="fas fa-shopping-cart"></i>
-                        <span class="cart-count">4</span>
+                        <span class="cart-count" id="cartCount">0</span>
                     </a>
-                    <a href="profile.html" class="profile-icon">
+                    <a href="{% url 'profile' %}" class="profile-icon">
                         <i class="fas fa-user"></i>
                     </a>
-                    <a href="login.html" class="btn btn-login">Logout</a>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'logout_user' %}" class="btn btn-login" title="Logout">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </a>
+                    {% else %}
+                        <a href="{% url 'login_user' %}" class="btn btn-login">Login</a>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </nav>
+
 
     <!-- Hero Section -->
     <section class="profile-hero" data-aos="fade-up">
@@ -365,32 +373,46 @@
             <h2 data-aos="fade-up">Profile Details</h2>
             <div class="user-info" data-aos="fade-up" data-aos-delay="100">
                 <h3>Personal Information</h3>
-                <p><strong>Username:</strong> john_doe</p>
-                <p><strong>Email:</strong> john.doe@example.com</p>
-                <p><strong>Address:</strong> 123 Urban Street, New York, NY 10001, USA</p>
-                <a href="edit_address.html" class="btn btn-edit">Edit Address</a>
-                <a href="login.html" class="btn btn-logout">Logout</a>
+                <p><strong>Username:</strong> {{ user.username }}</p>
+                <p><strong>Email:</strong> {{ user.email }}</p>
+                <p><strong>Address:</strong> 
+                    {% if address %}
+                        {{ address.street|default:'' }}{% if address.street %}, {% endif %}
+                        {{ address.city|default:'' }}{% if address.city %}, {% endif %}
+                        {{ address.state|default:'' }}{% if address.state %}, {% endif %}
+                        {{ address.postal_code|default:'' }}{% if address.postal_code %}, {% endif %}
+                        {{ address.country|default:'Not provided' }}
+                    {% else %}
+                        Not provided
+                    {% endif %}
+                </p>
+                <a href="{% url 'edit_address' %}" class="btn btn-edit">Edit Address</a>
+                <a href="{% url 'logout_user' %}" class="btn btn-logout">Logout</a>
             </div>
             <div class="order-history" data-aos="fade-up" data-aos-delay="200">
                 <h3>Order History</h3>
-                <div class="order-card">
-                    <h4>Order #SLX123456 - May 20, 2025</h4>
-                    <p><strong>Items:</strong> Oversized Tee, Cargo Pants</p>
-                    <p><strong>Total:</strong> $224.50</p>
-                    <p><strong>Status:</strong> Shipped</p>
-                    <a href="order_detail.html" class="btn btn-details">View Details</a>
-                </div>
-                <div class="order-card">
-                    <h4>Order #SLX123457 - May 15, 2025</h4>
-                    <p><strong>Items:</strong> Relentless Hoodie, Urban Jacket</p>
-                    <p><strong>Total:</strong> $164.00</p>
-                    <p><strong>Status:</strong> Delivered</p>
-                    <a href="order_detail.html" class="btn btn-details">View Details</a>
-                </div>
+                {% for transaction in transactions %}
+                    <div class="order-card">
+                        <h4>Order #{{ transaction.tx_ref }} - {{ transaction.transaction_date|date:"F d, Y" }}</h4>
+                        <p><strong>Items:</strong> 
+                            {% for product in transaction.products.all %}
+                                {{ product.name }}{% if not forloop.last %}, {% endif %}
+                            {% empty %}
+                                No items
+                            {% endfor %}
+                        </p>
+                        <p><strong>Total:</strong> ₦{{ transaction.amount }}</p>
+                        <p><strong>Status:</strong> {{ transaction.get_transaction_status_display }}</p>
+                        <a href="{% url 'order_detail' transaction.id %}" class="btn btn-details">View Details</a>
+                    </div>
+                {% empty %}
+                    <div class="order-card">
+                        <p>No orders found.</p>
+                    </div>
+                {% endfor %}
             </div>
         </div>
     </section>
-
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
@@ -411,9 +433,9 @@
                 <div class="col-md-4 mb-4">
                     <h5>Follow Us</h5>
                     <div class="social-icons">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-tiktok"></i></a>
+                        <a href="https://www.instagram.com/suxesluxthread?igsh=Y2N1aGhtd3M2Zm0w" target="_blank" ><i class="fab fa-instagram"></i></a>
+                        <a href="https://x.com/suxesluxthread?s=09" target="_blank" ><i class="fab fa-twitter"></i></a>
+                        <a href="https://vm.tiktok.com/ZMSMBxJxd/"  target="_blank"><i class="fab fa-tiktok"></i></a>
                     </div>
                 </div>
             </div>
