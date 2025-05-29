@@ -130,7 +130,7 @@ def initiate_payment(request, transaction_id):
         'transaction': transaction,
         'cart_items': cart_items,
         'public_key': settings.FLUTTERWAVE_PUBLIC_KEY,
-        'redirect_url': 'https://godoneveryside.pythonanywhere.com/payment-callback',
+        'redirect_url': 'https://suxesluxthread.pythonanywhere.com/payment-callback',
         'customer': {
             'name': f"{request.user.first_name} {request.user.last_name}",
             'email': request.user.email,
