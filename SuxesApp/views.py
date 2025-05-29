@@ -143,115 +143,60 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
-# views.py
-@csrf_exempt
-@require_http_methods(["GET", "POST"])
 def payment_callback(request):
-    if request.method == "POST":
+    status = request.GET.get('status')
+    tx_ref = request.GET.get('tx_ref')
+    transaction_id = request.GET.get('transaction_id')
+
+    if status == 'successful':
         try:
-            webhook_data = json.loads(request.body.decode('utf-8'))
-            event_type = webhook_data.get('event')
-            transaction_data = webhook_data.get('data', {})
-            tx_ref = transaction_data.get('tx_ref')
-            transaction_id = transaction_data.get('id')
-            status = transaction_data.get('status')
-
-            try:
-                transaction = Transaction.objects.get(tx_ref=tx_ref)
-            except Transaction.DoesNotExist:
-                return HttpResponse(status=404)
-
-            if event_type == 'charge.completed' and status in ['successful', 'completed']:
-                verification_response = verify_transaction(transaction_id)
-                if (verification_response['status'] == 'success' and 
-                    verification_response['data']['status'] in ['successful', 'completed'] and
-                    verification_response['data']['amount'] == float(transaction.amount) and
-                    verification_response['data']['currency'] == 'NGN'):
-                    transaction.flw_transaction_id = transaction_id
-                    transaction.transaction_status = 'processing'
-                    transaction.save()
-                    cart = Cart.objects.get(user=transaction.user)
-                    cart_items = cart.items.all()
-                    for cart_item in cart_items:
-                        product = cart_item.product
-                        if product.in_stock >= cart_item.quantity:
-                            product.in_stock -= cart_item.quantity
-                            product.save()
-                        else:
-                            transaction.transaction_status = 'declined'
-                            transaction.save()
-                            return HttpResponse(status=400)
-                    cart_items.delete()
-            elif status == 'failed':
+            transaction = Transaction.objects.get(tx_ref=tx_ref)
+            # Verify transaction with Flutterwave
+            verification_response = verify_transaction(transaction_id)
+            if (verification_response['status'] == 'success' and 
+                verification_response['data']['status'] == 'successful' and
+                verification_response['data']['amount'] == float(transaction.amount) and
+                verification_response['data']['currency'] == 'NGN'):
+                # Update transaction status to processing
+                transaction.flw_transaction_id = transaction_id
+                transaction.transaction_status = 'processing'
+                transaction.save()
+                # Get the cart and its items
+                cart = Cart.objects.get(user=transaction.user)
+                cart_items = cart.items.all()
+                # Reduce stock for each product based on cart item quantity
+                for cart_item in cart_items:
+                    product = cart_item.product
+                    if product.in_stock >= cart_item.quantity:
+                        product.in_stock -= cart_item.quantity
+                        product.save()
+                    else:
+                        # Handle case where stock is insufficient
+                        transaction.transaction_status = 'declined'
+                        transaction.save()
+                        messages.error(request, f"Insufficient stock for {product.name}.")
+                        return redirect('cart')
+                # Clear the cart
+                cart_items.delete()
+                messages.success(request, "Payment successful! Your order is being processed.")
+            else:
                 transaction.transaction_status = 'declined'
                 transaction.save()
-            return HttpResponse(status=200)
-        except Exception as e:
-            print(f"Webhook error: {str(e)}")
-            return HttpResponse(status=400)
+                messages.error(request, "Payment verification failed.")
+        except Transaction.DoesNotExist:
+            messages.error(request, "Transaction not found.")
+    elif status == 'cancelled':
+        try:
+            transaction = Transaction.objects.get(tx_ref=tx_ref)
+            transaction.transaction_status = 'declined'
+            transaction.save()
+            messages.error(request, "Payment was cancelled.")
+        except Transaction.DoesNotExist:
+            messages.error(request, "Transaction not found.")
+    else:
+        messages.error(request, "Payment failed. Please try again.")
 
-    elif request.method == "GET":
-        status = request.GET.get('status')
-        tx_ref = request.GET.get('tx_ref')
-        transaction_id = request.GET.get('transaction_id')
-
-        if status in ['successful', 'completed']:
-            try:
-                transaction = Transaction.objects.get(tx_ref=tx_ref)
-                verification_response = verify_transaction(transaction_id)
-                if (verification_response['status'] == 'success' and 
-                    verification_response['data']['status'] in ['successful', 'completed'] and
-                    verification_response['data']['amount'] == float(transaction.amount) and
-                    verification_response['data']['currency'] == 'NGN'):
-                    transaction.flw_transaction_id = transaction_id
-                    transaction.transaction_status = 'processing'
-                    transaction.save()
-                    cart = Cart.objects.get(user=transaction.user)
-                    cart_items = cart.items.all()
-                    for cart_item in cart_items:
-                        product = cart_item.product
-                        if product.in_stock >= cart_item.quantity:
-                            product.in_stock -= cart_item.quantity
-                            product.save()
-                        else:
-                            transaction.transaction_status = 'declined'
-                            transaction.save()
-                            messages.error(request, f"Insufficient stock for {product.name}.")
-                            return redirect('cart')
-                    cart_items.delete()
-                    messages.success(request, "Payment successful! Your order is being processed.")
-                    return redirect('thank_you', transaction_id=transaction.id)  # Redirect to thank_you page
-                else:
-                    print(f"Verification failed: {verification_response}")
-                    transaction.transaction_status = 'declined'
-                    transaction.save()
-                    messages.error(request, "Payment verification failed.")
-            except Transaction.DoesNotExist:
-                messages.error(request, "Transaction not found.")
-        elif status == 'cancelled':
-            try:
-                transaction = Transaction.objects.get(tx_ref=tx_ref)
-                transaction.transaction_status = 'declined'
-                transaction.save()
-                messages.error(request, "Payment was cancelled.")
-            except Transaction.DoesNotExist:
-                messages.error(request, "Transaction not found.")
-        else:
-            messages.error(request, f"Payment failed with status: {status}. Please try again.")
-
-        return redirect('cart')
-
-def thank_you(request, transaction_id):
-    transaction = get_object_or_404(Transaction, id=transaction_id, user=request.user)
-    categories = Category.objects.all()
-    cart_count = Cart.objects.get(user=request.user).items.count() if request.user.is_authenticated else 0
-
-    context = {
-        'transaction': transaction,
-        'categories': categories,
-        'cart_count': cart_count,
-    }
-    return render(request, 'SuxesApp/thank_you.html', context)
+    return redirect('cart')
 
 def verify_transaction(transaction_id):
     url = f"https://api.flutterwave.com/v3/transactions/{transaction_id}/verify"
