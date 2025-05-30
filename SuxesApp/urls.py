@@ -23,4 +23,5 @@ urlpatterns = [
     path('contact/', views.contact, name='contact'),
     path('about/', views.about, name='about'),
     path('lookbook/', views.lookbook, name='lookbook'),
+    path('thank-you/<int:transaction_id>/', views.thank_you, name='thank_you'), 
 ]
