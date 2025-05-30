@@ -360,9 +360,9 @@
                 <img src="{% static 'images/LOGO  ISOTYOE WHITE.png' %}" style="width: 60px;" alt="SuXeS Lux Thread Logo">
                 <span>SuXeS Lux Thread</span>
             </a>
-            <a href="#cart" class="cart-mobile">
+            <a href="{% url 'cart' %}" class="cart-mobile">
                 <i class="fas fa-shopping-cart"></i>
-                <span class="cart-count" id="cartCountMobile">0</span>
+                <span class="cart-count" id="cartCountMobile">{{ cart_count }}</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" style="">
                 <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
@@ -396,7 +396,7 @@
                 <div class="navbar-icons ms-3">
                     <a href="{% url 'cart' %}" class="cart-icon">
                         <i class="fas fa-shopping-cart"></i>
-                        <span class="cart-count" id="cartCount">0</span>
+                        <span class="cart-count" id="cartCount">{{ cart_count }}</span>
                     </a>
                     <a href="{% url 'profile' %}" class="profile-icon">
                         <i class="fas fa-user"></i>
@@ -586,32 +586,7 @@
             once: true
         });
 
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
-
-        // Cart item count (example logic)
-        let cartCount = 0;
-        const cartCountElement = document.getElementById('cartCount');
-        const cartCountMobileElement = document.getElementById('cartCountMobile');
-        function updateCartCount() {
-            cartCountElement.textContent = cartCount;
-            cartCountMobileElement.textContent = cartCount;
-        }
-        // Example: Simulate adding an item to the cart
-        // Replace this with actual cart logic in your backend or localStorage
-        function addToCart() {
-            cartCount++;
-            updateCartCount();
-        }
-        // Initialize cart count
-        updateCartCount();
+   
     </script>
 </body>
 </html>
