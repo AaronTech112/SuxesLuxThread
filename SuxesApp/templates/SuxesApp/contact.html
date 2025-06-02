@@ -337,7 +337,7 @@
     <!-- Sticky Navbar -->
     <nav class="navbar navbar-expand-lg">
         <div class="container">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="{% url 'home' %}">
                 <img src="{% static 'images/LOGO  ISOTYOE WHITE.png' %}" style="width: 60px;" alt="SuXeS Lux Thread Logo">
                 <span>SuXeS Lux Thread</span>
             </a>
@@ -467,7 +467,7 @@
             <div class="container">
                 <h2>Wear Your Ambition</h2>
                 <p>Explore the Spring 2025 Collection and join the SuXeS Lux Thread movement.</p>
-                <a href="shop.html" class="btn btn-shop-now">Shop Now</a>
+                <a href="{% url 'shop' %}" class="btn btn-shop-now">Shop Now</a>
             </div>
         </div>
     </section>

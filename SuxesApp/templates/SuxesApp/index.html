@@ -356,7 +356,7 @@
     <!-- Sticky Navbar -->
     <nav class="navbar navbar-expand-lg">
         <div class="container">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="{% url 'home' %}">
                 <img src="{% static 'images/LOGO  ISOTYOE WHITE.png' %}" style="width: 60px;" alt="SuXeS Lux Thread Logo">
                 <span>SuXeS Lux Thread</span>
             </a>
@@ -527,7 +527,7 @@
         <div class="container">
             <h2 data-aos="fade-up">Join the Relentless Movement</h2>
             <p data-aos="fade-up" data-aos-delay="100">SuXeS Lux Thread is more than clothing—it’s a lifestyle. Connect with a community of creators, entrepreneurs, and dreamers who wear their ambition with pride.</p>
-            <a href="#contact" class="btn btn-shop" data-aos="fade-up" data-aos-delay="200">Get Involved</a>
+            <a href="{% url 'shop' %}" class="btn btn-shop" data-aos="fade-up" data-aos-delay="200">Get Involved</a>
         </div>
     </section>
 

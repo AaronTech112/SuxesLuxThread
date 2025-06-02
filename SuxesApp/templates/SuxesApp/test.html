@@ -4,21 +4,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SuXeS Lux Thread - Checkout</title>
+    <title>SuXeS Lux Thread - Homepage</title>
     <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <!-- Google Fonts (Montserrat) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- AOS for animations -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Google Fonts (Montserrat for bold, urban typography) -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
     <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous">
-    <script src="https://checkout.flutterwave.com/v3.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/fonts.css' %}">
+    <link rel="icon" type="image/png" href="{% static 'images/LOGO ISOTYOE WHITE.png' %}">
     <style>
         body {
             font-family: 'Montserrat', sans-serif;
             background-color: #fff;
             color: #000;
-            margin: 0;
-            padding: 0;
+            overflow-x: hidden;
         }
         /* Sticky Navbar */
         .navbar {
@@ -50,6 +52,7 @@
         .navbar-nav .nav-link:hover {
             color: #999 !important;
         }
+        /* Cart and Profile Icons */
         .navbar-icons {
             display: flex;
             align-items: center;
@@ -98,6 +101,7 @@
             background-color: #666;
             color: #fff;
         }
+        /* Mobile Cart Icon */
         .cart-mobile {
             display: none;
             position: relative;
@@ -109,159 +113,199 @@
             color: #999;
         }
         /* Hero Section */
-        .checkout-hero {
-            background-color: #000;
-            color: #fff;
-            padding: 40px 0;
-            text-align: center;
-            margin-bottom: 40px;
-            min-height: 200px;
-        }
-        .checkout-hero h1 {
-            font-size: 3rem;
-            font-weight: 900;
-            text-transform: uppercase;
-        }
-        /* Cart Section */
-        .cart-section {
-            padding: 60px 0;
-            background-color: #fff;
-            min-height: 400px;
-        }
-        .cart-items {
-            margin-bottom: 40px;
-        }
-        .cart-item {
+        .hero-section {
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
             display: flex;
             align-items: center;
-            background-color: #f8f8f8;
-            padding: 20px;
-            margin-bottom: 20px;
-            transition: transform 0.3s ease;
+            justify-content: center;
+            text-align: center;
         }
-        .cart-item:hover {
-            transform: translateY(-5px);
-        }
-        .cart-item img {
-            width: 120px;
-            height: auto;
+        .hero-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             object-fit: cover;
-            margin-right: 20px;
+            z-index: -1;
+            filter: brightness(0.5);
         }
-        .cart-item-details {
-            flex-grow: 1;
+        .hero-content {
+            z-index: 1;
         }
-        .cart-item-details h3 {
+        .hero-content h1 {
+            font-size: 4.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #fff;
+        }
+        .hero-content p {
             font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-        .cart-item-details p {
-            font-size: 1rem;
             font-weight: 400;
-            color: #333;
-            margin-bottom: 5px;
+            margin: 20px 0;
+            color: #999;
         }
-        /* Checkout Form */
-        .checkout-form {
-            padding: 60px 0;
-            background-color: #f8f8f8;
-            min-height: 600px;
+        .btn-shop {
+            background-color: #fff;
+            color: #000;
+            font-weight: 700;
+            padding: 12px 30px;
+            border-radius: 0;
+            transition: all 0.3s ease;
         }
-        .checkout-form h2 {
+        .btn-shop:hover {
+            background-color: #666;
+            color: #fff;
+            transform: translateY(-3px);
+        }
+        /* Brand Story Section */
+        .story-section {
+            padding: 80px 0;
+            background-color: #000;
+            color: #fff;
+        }
+        .story-section h2 {
             font-size: 2.5rem;
             font-weight: 900;
             margin-bottom: 20px;
         }
-        .form-control {
-            border: 2px solid #000;
-            border-radius: 0;
-            padding: 12px;
-            font-size: 1rem;
-            margin-bottom: 20px;
-            background-color: #fff;
-            transition: border-color 0.3s ease;
+        .story-section p {
+            font-size: 1.2rem;
+            color: #999;
         }
-        .form-control:focus {
-            border-color: #666;
-            box-shadow: none;
-        }
-        .form-check-label {
-            font-weight: 400;
-            font-size: 1rem;
-        }
-        .card-input {
-            border: 2px solid #000;
-            padding: 12px;
-            margin-bottom: 20px;
+        /* Models Showcase Section */
+        .models-section {
+            padding: 80px 0;
             background-color: #fff;
         }
-        .trust-badges {
-            margin-top: 20px;
-            display: flex;
-            gap: 10px;
+        .models-section h2 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 40px;
         }
-        .trust-badges img {
-            width: 60px;
+        .model-card {
+            position: relative;
+            overflow: hidden;
+            border: none;
         }
-        .btn-checkout {
-            background-color: #000;
+        .model-card img {
+            width: 100%;
+            height: auto;
+            transition: transform 0.3s ease;
+        }
+        .model-card:hover img {
+            transform: scale(1.1);
+        }
+        .model-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
             color: #fff;
-            font-weight: 700;
-            padding: 12px 40px;
-            border-radius: 0;
-            text-transform: uppercase;
-            transition: all 0.3s ease;
+            padding: 15px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
-        .btn-checkout:hover {
-            background-color: #666;
+        .model-card:hover .model-overlay {
+            opacity: 1;
         }
-        .btn-continue {
-            background-color: transparent;
-            color: #000;
-            border: 1px solid #000;
-            font-weight: 700;
-            padding: 12px 40px;
-            border-radius: 0;
-            text-transform: uppercase;
-            transition: all 0.3s ease;
-            margin-left: 10px;
+        /* Featured Collection */
+        .featured-section {
+            padding: 80px 0;
+            background-color: #333;
         }
-        .btn-continue:hover {
-            background-color: #666;
+        .featured-section h2 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 40px;
             color: #fff;
         }
-        /* Order Summary */
-        .cart-summary {
-            background-color: #000;
-            color: #fff;
-            padding: 30px;
-            text-align: right;
+        .product-card {
+            position: relative;
+            overflow: hidden;
+            border: none;
+            background-color: #222;
+            transition: transform 0.3s ease;
         }
-        .cart-summary h3 {
-            font-size: 1.8rem;
+        .product-card img {
+            width: 100%;
+            height: auto;
+            transition: transform 0.3s ease;
+        }
+        .product-card:hover img {
+            transform: scale(1.1);
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+        .product-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 15px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .product-card:hover .product-overlay {
+            opacity: 1;
+        }
+        /* Community Section */
+        .community-section {
+            padding: 80px 0;
+            background-color: #fff;
+            text-align: center;
+        }
+        .community-section h2 {
+            font-size: 2.5rem;
             font-weight: 900;
             margin-bottom: 20px;
         }
-        .cart-summary p {
+        .community-section p {
             font-size: 1.2rem;
-            margin-bottom: 10px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        /* Newsletter Section */
+        .newsletter-section {
+            padding: 60px 0;
+            background-color: #000;
+            text-align: center;
+            color: #fff;
+        }
+        .newsletter-section h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        .newsletter-section input {
+            border-radius: 0;
+            border: 1px solid #999;
+            background-color: #222;
+            color: #fff;
+            padding: 10px;
+        }
+        .newsletter-section .btn {
+            border-radius: 0;
+            background-color: #fff;
+            color: #000;
+            font-weight: 700;
         }
         /* Footer */
         .footer {
             background-color: #000;
-            padding: 60px 0;
+            padding: 40px 0;
             color: #fff;
         }
-        .footer h5 {
-            font-size: 1.5rem;
-            font-weight: 900;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-        }
-        .footer p, .footer a {
-            font-size: 1rem;
-            font-weight: 400;
+        .footer a {
             color: #999;
             text-decoration: none;
             transition: color 0.3s ease;
@@ -269,62 +313,21 @@
         .footer a:hover {
             color: #fff;
         }
-        .footer .social-icons {
-            display: flex;
-            gap: 15px;
-        }
-        .footer .social-icons a {
-            font-size: 2rem;
+        .social-icons a {
+            font-size: 1.5rem;
+            margin: 0 10px;
             color: #999;
-        }
-        .footer .social-icons a:hover {
-            color: #fff;
-        }
-        .footer hr {
-            border-color: #333;
-            margin: 40px 0;
-        }
-        .footer .text-center p {
-            font-size: 0.9rem;
         }
         /* Responsive Adjustments */
         @media (max-width: 768px) {
-            .checkout-hero h1 {
-                font-size: 2rem;
+            .hero-content h1 {
+                font-size: 2.5rem;
             }
-            .cart-item {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .cart-item img {
-                width: 100px;
-                margin-bottom: 15px;
-            }
-            .cart-item-details h3 {
+            .hero-content p {
                 font-size: 1.2rem;
             }
-            .cart-item-details p {
-                font-size: 0.9rem;
-            }
-            .cart-summary h3 {
-                font-size: 1.5rem;
-            }
-            .cart-summary p {
-                font-size: 1rem;
-            }
-            .checkout-form h2 {
+            .story-section h2, .models-section h2, .featured-section h2, .community-section h2 {
                 font-size: 1.8rem;
-            }
-            .form-control {
-                padding: 10px;
-                font-size: 0.9rem;
-            }
-            .btn-checkout, .btn-continue {
-                padding: 10px 20px;
-                font-size: 0.9rem;
-            }
-            .trust-badges img {
-                width: 50px;
             }
             .navbar-brand {
                 font-size: 1.5rem;
@@ -333,27 +336,18 @@
                 width: 30px;
             }
             .navbar-icons {
-                display: none;
+                display: none; /* Hide cart icon in navbar-icons on mobile */
             }
             .cart-mobile {
-                display: inline-block;
+                display: inline-block; /* Show cart icon outside hamburger menu on mobile */
             }
             .btn-login {
                 margin: 10px 0;
             }
-            .footer h5 {
-                font-size: 1.2rem;
-            }
-            .footer p, .footer a {
-                font-size: 0.9rem;
-            }
-            .footer .social-icons a {
-                font-size: 1.5rem;
-            }
         }
         @media (min-width: 769px) {
             .cart-mobile {
-                display: none;
+                display: none; /* Hide mobile cart icon on desktop */
             }
         }
     </style>
@@ -362,7 +356,7 @@
     <!-- Sticky Navbar -->
     <nav class="navbar navbar-expand-lg">
         <div class="container">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="{% url 'home' %}">
                 <img src="{% static 'images/LOGO  ISOTYOE WHITE.png' %}" style="width: 60px;" alt="SuXeS Lux Thread Logo">
                 <span>SuXeS Lux Thread</span>
             </a>
@@ -370,16 +364,24 @@
                 <i class="fas fa-shopping-cart"></i>
                 <span class="cart-count" id="cartCountMobile">0</span>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" style="">
+                <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'home' %}">Home</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'shop' %}">Shop</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="{% url 'shop' %}" id="shopDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Shop
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="shopDropdown">
+                            <li><a class="dropdown-item" href="{% url 'shop' %}?search={{ request.GET.search|urlencode }}">All</a></li>
+                            {% for category in categories %}
+                                <li><a class="dropdown-item" href="{% url 'shop' %}?category={{ category.id }}&search={{ category.name|urlencode }}">{{ category.name }}</a></li>
+                            {% endfor %}
+                        </ul>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'lookbook' %}">Lookbook</a>
@@ -412,107 +414,129 @@
     </nav>
 
     <!-- Hero Section -->
-    <section class="checkout-hero">
-        <div class="container">
-            <h1>Checkout</h1>
+    <section class="hero-section" id="home">
+        <video class="hero-video" autoplay muted loop>
+            <source src="{% static 'images/video2.mp4' %}" type="video/mp4">
+        </video>
+        <div class="hero-content" data-aos="fade-up">
+            <h1>SuXeS Lux Thread</h1>
+            <p>Forever Relentless.</p>
+            <a href="{% url 'shop' %}" class="btn btn-shop">Shop Now</a>
         </div>
     </section>
 
-    <!-- Cart Section -->
-    <section class="cart-section">
+    <!-- Brand Story Section -->
+    <section class="story-section">
         <div class="container">
-            <h2>Your Items</h2>
-            <div class="cart-items">
-                {% for item in cart_items %}
-                    <div class="cart-item">
-                        {% with item.product.images.first as product_image %}
-                            <img src="{{ product_image.image.url|default:'/static/images/placeholder.jpg' }}" alt="{{ item.product.name }}">
-                        {% endwith %}
-                        <div class="cart-item-details">
-                            <h3>{{ item.product.name }}</h3>
-                            <p>Size: {{ item.size.name|default:'N/A' }}</p>
-                            <p>Quantity: {{ item.quantity }}</p>
-                            <p>Price: ${{ item.total_price|floatformat:2 }}</p>
+            <div class="row align-items-center">
+                <div class="col-md-6" data-aos="fade-right">
+                    <h2>Our Story</h2>
+                    <p>SuXeS Lux Thread is born from the grind—blending high-end aesthetics with the raw edge of street culture. We’re for the dreamers, the doers, the relentless. Every piece we craft is a statement of ambition, designed for those who rise from nothing and shine in style.</p>
+                    <a href="{% url 'shop' %}" class="btn btn-shop">Learn More</a>
+                </div>
+                <div class="col-md-6" data-aos="fade-left">
+                    <img src="{% static 'images/JAZ_5082 1.psd BK.jpg' %}" alt="Brand Story Image" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Models Showcase Section -->
+    <section class="models-section">
+        <div class="container">
+            <h2 data-aos="fade-up">Wear the Vibe</h2>
+            <div class="row">
+                <div class="col-md-4 col-sm-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="model-card">
+                        <img src="{% static 'images/JAZ_5107 1.psd BK.jpg' %}" alt="Model 1">
+                        <div class="model-overlay">
+                            <h5>Street Elegance</h5>
+                            <p>Hoodie & Cargo Combo</p>
                         </div>
                     </div>
+                </div>
+                <div class="col-md-4 col-sm-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="model-card">
+                        <img src="{% static 'images/JAZ_5070 1.psd BK.jpg' %}" alt="Model 2">
+                        <div class="model-overlay">
+                            <h5>Urban Edge</h5>
+                            <p>Oversized Tee & Jeans</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 mb-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="model-card">
+                        <img src="{% static 'images/JAZ_5090 1.psd BK.jpg' %}" alt="Model 3">
+                        <div class="model-overlay">
+                            <h5>Relentless Style</h5>
+                            <p>Jacket & Shorts</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Collection Section -->
+    <section class="featured-section" id="shop">
+        <div class="container">
+            <h2 data-aos="fade-up">Featured Collection</h2>
+            <div class="row">
+                {% for product in products %}
+                <div class="col-md-4 col-sm-6 mb-4" data-aos="fade-up" data-aos-delay="{{ forloop.counter|add:'1' }}00">
+                    <div class="product-card">
+                        {% if product.images.all %}
+                            <img src="{{ product.images.first.image.url }}" alt="{{ product.name }}">
+                        {% else %}
+                            <img src="{% static 'images/placeholder.png' %}" alt="No image available">
+                        {% endif %}
+                        <div class="product-overlay">
+                            <h5>{{ product.name }}</h5>
+                            <p>₦{{ product.price }}</p>
+                            <a href="{% url 'product_detail' product.id %}" class="btn btn-sm btn-shop">Add to Cart</a>
+                        </div>
+                    </div>
+                </div>
                 {% empty %}
-                    <p>Your cart is empty.</p>
+                <div class="col-12">
+                    <p class="text-center text-light">No products available.</p>
+                </div>
                 {% endfor %}
             </div>
         </div>
     </section>
+    <style>
+        /* Show product-overlay always on mobile */
+        @media (max-width: 768px) {
+            .product-overlay {
+                opacity: 1 !important;
+                background: rgba(0,0,0,0.7);
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                color: #fff;
+                padding: 15px;
+                transition: none;
+            }
+        }
+    </style>
 
-
-    <!-- Checkout Form -->
-    <section class="checkout-form" id="checkout">
+    <!-- Community Section -->
+    <section class="community-section">
         <div class="container">
-            <h2>Checkout Details</h2>
-            <div class="row">
-                <div class="col-md-8">
-                    <!-- Guest or Login -->
-                    {% comment %} <div class="mb-4">
-                        <p><strong>Checkout as Guest or Login</strong></p>
-                        <div class="form-check mb-3">
-                            <input class="form-check-input" type="radio" name="checkoutOption" id="guestCheckout" {% if not request.user.is_authenticated %}checked{% endif %} disabled>
-                            <label class="form-check-label" for="guestCheckout">Continue as Guest</label>
-                        </div>
-                        <div class="form-check mb-3">
-                            <input class="form-check-input" type="radio" name="checkoutOption" id="loginCheckout" {% if request.user.is_authenticated %}checked{% endif %}>
-                            <label class="form-check-label" for="loginCheckout">Login to Account</label>
-                        </div>
-                        {% if not request.user.is_authenticated %}
-                            <div id="loginForm">
-                                <form method="POST" action="{% url 'login_user' %}">
-                                    {% csrf_token %}
-                                    <input type="email" class="form-control mb-2" name="email" placeholder="Email" required>
-                                    <input type="password" class="form-control mb-2" name="password" placeholder="Password" required>
-                                    <button type="submit" class="btn btn-login mt-2">Login</button>
-                                </form>
-                            </div>
-                        {% endif %}
-                    </div> {% endcomment %}
-                    <!-- Shipping Information -->
-                    <h4>Shipping Information</h4>
-                    <form method="POST" id="shippingForm">
-                        {% csrf_token %}
-                        {{ form.as_p }}
-                        <div class="trust-badges">
-                            <span title="PCI DSS Compliant"><i class="fas fa-shield-alt fa-2x"></i></span>
-                            <span title="SSL Secure"><i class="fas fa-lock fa-2x"></i></span>
-                        </div>
-                        <button type="submit" class="btn btn-dark mt-3">Save Address</button>
-                        <a href="{% url 'shop' %}" class="btn btn-continue">Continue Shopping</a>
-                    </form>
-                </div>
-                <div class="col-md-4">
-                    <div class="cart-summary">
-                        <h3>Order Summary</h3>
-                        {% for item in cart_items %}
-                            <p class="d-flex justify-content-between">
-                                <span>{{ item.product.name }} (x{{ item.quantity }})</span>
-                                <span>${{ item.total_price|floatformat:0 }}</span>
-                            </p>
-                        {% endfor %}
-                        <p class="d-flex justify-content-between">
-                            <span>Subtotal:</span>
-                            <span>${{ subtotal|floatformat:0 }}</span>
-                        </p>
-                        <p class="d-flex justify-content-between">
-                            <span>Shipping:</span>
-                            <span>${{ shipping_fee|floatformat:0 }}</span>
-                        </p>
-                        <p class="d-flex justify-content-between">
-                            <span>Tax:</span>
-                            <span>0</span>
-                        </p>
-                        <p class="d-flex justify-content-between fw-bold">
-                            <span>Total:</span>
-                            <span>${{ total_price|floatformat:2 }}</span>
-                        </p>
-                        <button type="button" class="btn btn-checkout" onclick="initiatePayment()">Place Order</button>
-                    </div>
-                </div>
-            </div>
+            <h2 data-aos="fade-up">Join the Relentless Movement</h2>
+            <p data-aos="fade-up" data-aos-delay="100">SuXeS Lux Thread is more than clothing—it’s a lifestyle. Connect with a community of creators, entrepreneurs, and dreamers who wear their ambition with pride.</p>
+            <a href="#contact" class="btn btn-shop" data-aos="fade-up" data-aos-delay="200">Get Involved</a>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="newsletter-section">
+        <div class="container">
+            <h2 data-aos="fade-up">Stay in the Loop</h2>
+            <p data-aos="fade-up" data-aos-delay="100">Get the latest drops and exclusive offers.</p>
+
         </div>
     </section>
 
@@ -520,25 +544,26 @@
     <footer class="footer">
         <div class="container">
             <div class="row">
-                <div class="col-md-4 mb-4">
+                <div class="col-md-4 mb-3">
                     <h5>SuXeS Lux Thread</h5>
                     <p>Forever Relentless. Blending luxury with street culture.</p>
                 </div>
-                <div class="col-md-4 mb-4">
+                <div class="col-md-4 mb-3">
                     <h5>Quick Links</h5>
                     <ul class="list-unstyled">
-                        <li><a href="index.html#shop">Shop</a></li>
-                        <li><a href="about.html">About</a></li>
-                        <li><a href="contact.html">Contact</a></li>
-                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="#shop">Shop</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                        <li><a href="#faq">FAQ</a></li>
                     </ul>
                 </div>
-                <div class="col-md-4 mb-4">
+                <div class="col-md-4 mb-3">
                     <h5>Follow Us</h5>
                     <div class="social-icons">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-tiktok"></i></a>
+                        <a href="https://www.instagram.com/suxesluxthread?igsh=Y2N1aGhtd3M2Zm0w" target="_blank" ><i class="fab fa-instagram"></i></a>
+                        <a href="https://x.com/suxesluxthread?s=09" target="_blank" ><i class="fab fa-twitter"></i></a>
+                        <a href="https://vm.tiktok.com/ZMSMBxJxd/"  target="_blank"><i class="fab fa-tiktok"></i></a>
+                        <a href="https://www.facebook.com/share/1AeFMAzyfU/?mibextid=wwXIfr"  target="_blank"><i class="fab fa-facebook"></i></a>
                     </div>
                 </div>
             </div>
@@ -549,50 +574,44 @@
             </div>
         </div>
     </footer>
-  <script>
-    function initiatePayment() {
-      fetch('{% url "create_transaction" %}', {
-        method: 'POST',
-        headers: {
-          'X-CSRFToken': '{{ csrf_token }}',
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.error) {
-          alert(data.error);
-          return;
-        }
-        makePayment(data.tx_ref, data.total_price);
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        alert('An error occurred. Please try again.');
-      });
-    }
 
-    function makePayment(tx_ref, amount) {
-      FlutterwaveCheckout({
-        public_key: "FLWPUBK_TEST-379d535caf0b456b195dda9e9d273851-X",
-        tx_ref: tx_ref,
-        amount: parseFloat(amount),
-        currency: "NGN",
-        payment_options: "card, banktransfer, ussd",
-        redirect_url: "https://glaciers.titanic.com/handle-flutterwave-payment",  // Replace with your ngrok URL
-        customer: {
-          email: "{{ request.user.email }}",
-          phone_number: "{{ request.user.phone_number|default:'' }}",
-          name: "{{ request.user.first_name|default:request.user.username }}",
-        },
-        customizations: {
-          title: "GOES - God On Every Side",
-          description: "Payment for your order",
-        },
-      });
-    }
-  </script>
-    <!-- Bootstrap JS (for navbar toggle only) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS and Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- AOS JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            once: true
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Cart item count (example logic)
+        let cartCount = 0;
+        const cartCountElement = document.getElementById('cartCount');
+        const cartCountMobileElement = document.getElementById('cartCountMobile');
+        function updateCartCount() {
+            cartCountElement.textContent = cartCount;
+            cartCountMobileElement.textContent = cartCount;
+        }
+        // Example: Simulate adding an item to the cart
+        // Replace this with actual cart logic in your backend or localStorage
+        function addToCart() {
+            cartCount++;
+            updateCartCount();
+        }
+        // Initialize cart count
+        updateCartCount();
+    </script>
 </body>
 </html>
