@@ -251,7 +251,7 @@ def thank_you(request, transaction_id):
         'categories': categories,
         'cart_count': cart_count,
     }
-    return render(request, 'GOESAPP/thank_you.html', context)
+    return render(request, 'SuxesApp/thank_you.html', context)
 
 
 
