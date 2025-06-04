@@ -7,7 +7,6 @@ from .models import (
     Address,
     Category,
     Product,
-    Review,
     Transaction,
     Cart,
     CartItem,
@@ -58,13 +57,6 @@ class AddressAdmin(admin.ModelAdmin):
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name',)
     search_fields = ('name', 'description')
-
-
-@admin.register(Review)
-class ReviewAdmin(admin.ModelAdmin):
-    list_display = ('product', 'user', 'rating', 'created_at')
-    list_filter = ('rating', 'created_at')
-    search_fields = ('product__name', 'user__username', 'comment')
 
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):

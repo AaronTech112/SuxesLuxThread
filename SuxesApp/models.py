@@ -100,24 +100,7 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return f"Image for {self.product.name}"
-    
-class Review(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='reviews')
-    rating = models.PositiveIntegerField()
-    comment = models.TextField(blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f"Review by {self.user.username} for {self.product.name} - {self.rating} stars"
-
-    class Meta:
-        verbose_name = 'Review'
-        verbose_name_plural = 'Reviews'
-        ordering = ['-created_at']
-
-
-    
 # models.py
 class Transaction(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='transactions', null=True, blank=True)
