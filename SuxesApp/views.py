@@ -130,7 +130,7 @@ def initiate_payment(request, transaction_id):
         'transaction': transaction,
         'cart_items': cart_items,
         'public_key': settings.FLUTTERWAVE_PUBLIC_KEY,
-        'redirect_url': 'https://suxesluxthread.pythonanywhere.com/payment-callback',
+        'redirect_url': 'https://www.suxesluxthread.com/payment-callback',
         'customer': {
             'name': f"{request.user.first_name} {request.user.last_name}",
             'email': request.user.email,
@@ -509,6 +509,14 @@ def contact(request):
 def about(request):
     categories = Category.objects.all()
     return render(request, 'SuxesApp/about.html', {'categories': categories})
+
+def terms(request):
+    categories = Category.objects.all()
+    return render(request, 'SuxesApp/terms.html', {'categories': categories})
+
+def privacy_policy(request):
+    categories = Category.objects.all()
+    return render(request, 'SuxesApp/privacy_policy.html', {'categories': categories})
 
 def lookbook(request):
     categories = Category.objects.all()

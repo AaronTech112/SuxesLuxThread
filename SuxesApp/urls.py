@@ -22,6 +22,8 @@ urlpatterns = [
     path('order-detail/<int:transaction_id>/', views.order_detail, name='order_detail'),
     path('contact/', views.contact, name='contact'),
     path('about/', views.about, name='about'),
+    path('terms/', views.terms, name='terms'),
+    path('privacy_policy/', views.privacy_policy, name='privacy_policy'),
     path('lookbook/', views.lookbook, name='lookbook'),
     path('thank-you/<int:transaction_id>/', views.thank_you, name='thank_you'), 
 ]

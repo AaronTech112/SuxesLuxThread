@@ -523,7 +523,7 @@
                             <p><strong>Sarah K.</strong> - ★★★★☆</p>
                             <p>Great design, super comfy. Wish there were more color options!</p>
                         </div>
-                        <div class="review-form">
+                        {% comment %} <div class="review-form">
                             <h4>Write a Review</h4>
                             <form>
                                 <div class="mb-3">
@@ -542,7 +542,7 @@
                                 </div>
                                 <button type="submit" class="btn btn-add-to-cart">Submit Review</button>
                             </form>
-                        </div>
+                        </div> {% endcomment %}
                     </div>
                 </div>
             </div>
@@ -577,7 +577,7 @@
             </div>
             <hr>
             <div class="text-center">
-                <p><a href="#">Terms & Conditions</a> | <a href="#">Privacy Policy</a></p>
+                <p><a href="{% url 'terms' %}">Terms & Conditions</a> | <a href="{% url 'privacy_policy' %}">Privacy Policy</a></p>
                 <p>© 2025 SuXeS Lux Thread. All rights reserved.</p>
             </div>
         </div>

@@ -110,10 +110,10 @@ class Transaction(models.Model):
     flw_transaction_id = models.CharField(max_length=100, blank=True, null=True)  # Store Flutterwave transaction ID
     address = models.ForeignKey(Address, on_delete=models.SET_NULL, null=True, blank=True)  # Link to address
     TRANSACTION_STATUS_CHOICES = (
-        ('pending', 'Pending'),
-        ('processing', 'Processing'),
-        ('approved', 'Approved'),
-        ('declined', 'Declined'),
+        ('pending', 'Payment Received — payment has been successfully completed '),
+        ('Packed', 'Packed — packing Order'),
+        ('In transit', 'In transit/out for delivery — with the courier '),
+        ('Delivered', 'Delivered — oder has reached your location.'),
     )
     transaction_status = models.CharField(max_length=20, choices=TRANSACTION_STATUS_CHOICES, default='pending')
     transaction_date = models.DateTimeField(auto_now_add=True)

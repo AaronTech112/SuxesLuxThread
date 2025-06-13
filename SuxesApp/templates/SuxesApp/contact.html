@@ -410,7 +410,7 @@
                 <div class="row">
                     <div class="col-md-6 mb-4">
                         <h2>Contact Us</h2>
-                        <form class="contact-form">
+                        <form class="contact-form" id="contactForm">
                             <div class="mb-3">
                                 <input type="text" class="form-control" placeholder="Name" required>
                             </div>
@@ -430,21 +430,47 @@
                         <div class="contact-info">
                             <h3>Customer Service</h3>
                             <p><strong>Email:</strong> <a href="mailto:support@suxesluxthread.com">support@suxesluxthread.com</a></p>
-                            <p><strong>Phone:</strong> <a href="tel:+1234567890">+1 (234) 567-890</a></p>
+                            <p><strong>Phone:</strong> <a href="tel:+2349161272834">+(234) 9161272834</a></p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- JavaScript to handle WhatsApp submission -->
+        <script>
+            document.getElementById('contactForm').addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent default form submission
+
+                // Get form input values
+                const name = this.querySelector('input[placeholder="Name"]').value;
+                const email = this.querySelector('input[placeholder="Email"]').value;
+                const subject = this.querySelector('input[placeholder="Subject"]').value;
+                const message = this.querySelector('textarea[placeholder="Message"]').value;
+
+                // Construct the message
+                const whatsappMessage = `Name: ${name}%0AEmail: ${email}%0ASubject: ${subject}%0AMessage: ${message}`;
+
+                // WhatsApp API URL
+                const whatsappNumber = '+2349161272834';
+                const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+
+                // Redirect to WhatsApp
+                window.open(whatsappURL, '_blank');
+
+                // Optional: Clear the form after submission
+                this.reset();
+            });
+        </script>
+
         <!-- Location Section -->
         <div class="location-section" data-aos="fade-up" data-aos-delay="100">
             <div class="container">
                 <h2>Visit Us</h2>
-                <p>SuXeS Lux Thread Headquarters<br>123 Urban Street, Suite 100<br>New York, NY 10001, USA</p>
+                <p>SuXeS Lux Thread Headquarters<br>Giginyu, Kano, 700213<br>Kano, NIgeria</p>
                 <!-- Placeholder Google Maps iframe -->
                 <div class="map-container">
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.241264871373!2d-73.98784368459395!3d40.74844097932847!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9b3117469%3A0xd134e199a4051f6!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1668000000000" allowfullscreen="" loading="lazy"></iframe>
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d64883.16582216791!2d8.529188869503507!3d11.992012939424196!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x11ae817d4ea4bb25%3A0x9a2b04685a729b24!2sGiginyu%2C%20Kano%20700213%2C%20Kano!5e1!3m2!1sen!2sng!4v1749199101296!5m2!1sen!2sng" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
             </div>
         </div>
@@ -500,7 +526,7 @@
             </div>
             <hr>
             <div class="text-center">
-                <p><a href="#">Terms & Conditions</a> | <a href="#">Privacy Policy</a></p>
+                <p><a href="{% url 'terms' %}">Terms & Conditions</a> | <a href="{% url 'privacy_policy' %}">Privacy Policy</a></p>
                 <p>© 2025 SuXeS Lux Thread. All rights reserved.</p>
             </div>
         </div>

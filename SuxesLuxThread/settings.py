@@ -142,4 +142,4 @@ FLUTTERWAVE_PUBLIC_KEY = 'FLWPUBK_TEST-5d19f5091bfb069566be7aee06028b99-X'
 FLUTTERWAVE_SECRET_KEY = 'FLWSECK_TEST-859e278cae6e19a049215799aeec9dc4-X'
 
 
-BASE_URL = "https://suxesluxthread.pythonanywhere.com/"
+BASE_URL = "https://www.suxesluxthread.com/"

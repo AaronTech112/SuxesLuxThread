@@ -4,22 +4,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SuXeS Lux Thread - Profile</title>
+    <title>SuXeS Lux Thread - Terms & Conditions</title>
     <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- AOS for animations -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <!-- Google Fonts (Montserrat) -->
+    <!-- Google Fonts (Montserrat for bold, urban typography) -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
     <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
             font-family: 'Montserrat', sans-serif;
             background-color: #fff;
             color: #000;
-            margin: 0;
-            padding: 0;
             overflow-x: hidden;
         }
         /* Sticky Navbar */
@@ -110,124 +108,50 @@
         .cart-mobile:hover {
             color: #999;
         }
-        /* Hero Section */
-        .profile-hero {
-            background-color: #000;
-            color: #fff;
-            padding: 40px 0;
-            text-align: center;
-            margin-bottom: 40px;
-            min-height: 200px;
-        }
-        .profile-hero h1 {
-            font-size: 3rem;
-            font-weight: 900;
-            text-transform: uppercase;
-        }
-        /* Profile Section */
-        .profile-section {
+        /* Terms Section */
+        .terms-section {
             padding: 60px 0;
-            background-color: #f8f8f8;
-            min-height: 600px;
+            background-color: #fff;
         }
-        .profile-section h2 {
+        .terms-section h1 {
             font-size: 2.5rem;
             font-weight: 900;
-            margin-bottom: 20px;
-        }
-        .user-info {
-            background-color: #fff;
-            padding: 20px;
+            text-transform: uppercase;
             margin-bottom: 40px;
-            border: 1px solid #ddd;
+            text-align: center;
         }
-        .user-info h3 {
+        .terms-section h2 {
             font-size: 1.8rem;
             font-weight: 700;
+            margin-top: 30px;
             margin-bottom: 15px;
         }
-        .user-info p {
-            font-size: 1rem;
+        .terms-section p, .terms-section li {
+            font-size: 1.1rem;
             font-weight: 400;
-            margin-bottom: 10px;
-        }
-        .btn-edit {
-            background-color: #fff;
-            color: #000;
-            font-weight: 700;
-            padding: 12px 30px;
-            border-radius: 0;
-            transition: all 0.3s ease;
-        }
-        .btn-edit:hover {
-            background-color: #666;
-            color: #fff;
-            transform: translateY(-3px);
-        }
-        .btn-logout {
-            background-color: transparent;
-            color: #000;
-            border: 1px solid #000;
-            font-weight: 700;
-            padding: 12px 30px;
-            border-radius: 0;
-            transition: all 0.3s ease;
-        }
-        .btn-logout:hover {
-            background-color: #666;
-            color: #fff;
-        }
-        .order-history {
-            margin-top: 40px;
-        }
-        .order-card {
-            background-color: #fff;
-            padding: 20px;
-            margin-bottom: 20px;
-            border: 1px solid #ddd;
-            transition: transform 0.3s ease;
-        }
-        .order-card:hover {
-            transform: translateY(-5px);
-        }
-        .order-card h4 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 15px;
-        }
-        .order-card p {
-            font-size: 1rem;
-            font-weight: 400;
+            line-height: 1.6;
             color: #333;
-            margin-bottom: 10px;
         }
-        .btn-details {
-            background-color: #fff;
+        .terms-section ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+        .terms-section a {
             color: #000;
             font-weight: 700;
-            padding: 10px 20px;
-            border-radius: 0;
-            transition: all 0.3s ease;
+            text-decoration: underline;
+            transition: color 0.3s ease;
         }
-        .btn-details:hover {
-            background-color: #666;
-            color: #fff;
+        .terms-section a:hover {
+            color: #666;
         }
         /* Footer */
         .footer {
             background-color: #000;
-            padding: 60px 0;
+            padding: 40px 0;
             color: #fff;
         }
-        .footer h5 {
-            font-size: 1.5rem;
-            font-weight: 900;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-        }
-        .footer p, .footer a {
-            font-size: 1rem;
-            font-weight: 400;
+        .footer a {
             color: #999;
             text-decoration: none;
             transition: color 0.3s ease;
@@ -235,47 +159,21 @@
         .footer a:hover {
             color: #fff;
         }
-        .footer .social-icons {
-            display: flex;
-            gap: 15px;
-        }
-        .footer .social-icons a {
-            font-size: 2rem;
+        .social-icons a {
+            font-size: 1.5rem;
+            margin: 0 10px;
             color: #999;
-        }
-        .footer .social-icons a:hover {
-            color: #fff;
-        }
-        .footer hr {
-            border-color: #333;
-            margin: 40px 0;
-        }
-        .footer .text-center p {
-            font-size: 0.9rem;
         }
         /* Responsive Adjustments */
         @media (max-width: 768px) {
-            .profile-hero h1 {
-                font-size: 2rem;
-            }
-            .profile-section h2 {
+            .terms-section h1 {
                 font-size: 1.8rem;
             }
-            .user-info h3 {
+            .terms-section h2 {
                 font-size: 1.5rem;
             }
-            .user-info p {
-                font-size: 0.9rem;
-            }
-            .btn-edit, .btn-logout, .btn-details {
-                padding: 10px 20px;
-                font-size: 0.9rem;
-            }
-            .order-card h4 {
-                font-size: 1.2rem;
-            }
-            .order-card p {
-                font-size: 0.9rem;
+            .terms-section p, .terms-section li {
+                font-size: 1rem;
             }
             .navbar-brand {
                 font-size: 1.5rem;
@@ -289,14 +187,8 @@
             .cart-mobile {
                 display: inline-block;
             }
-            .footer h5 {
-                font-size: 1.2rem;
-            }
-            .footer p, .footer a {
-                font-size: 0.9rem;
-            }
-            .footer .social-icons a {
-                font-size: 1.5rem;
+            .btn-login {
+                margin: 10px 0;
             }
         }
         @media (min-width: 769px) {
@@ -367,57 +259,44 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="profile-hero" data-aos="fade-up">
+    <!-- Privacy Policy Section -->
+    <section class="terms-section" data-aos="fade-up">
         <div class="container">
-            <h1>My Profile</h1>
-        </div>
-    </section>
+            <h1>Privacy Policy</h1>
+            <p>
+                At Suxes Lux Thread, we prioritize your privacy and are dedicated to safeguarding your personal information. This Privacy Policy delineates our practices regarding the collection, utilization, and protection of your data while engaging with our website.
+            </p>
 
-    <!-- Profile Section -->
-    <section class="profile-section">
-        <div class="container">
-            <h2 data-aos="fade-up">Profile Details</h2>
-            <div class="user-info" data-aos="fade-up" data-aos-delay="100">
-                <h3>Personal Information</h3>
-                <p><strong>Username:</strong> {{ user.username }}</p>
-                <p><strong>Email:</strong> {{ user.email }}</p>
-                <p><strong>Address:</strong> 
-                    {% if address %}
-                        {{ address.street|default:'' }}{% if address.street %}, {% endif %}
-                        {{ address.city|default:'' }}{% if address.city %}, {% endif %}
-                        {{ address.state|default:'' }}{% if address.state %}, {% endif %}
-                        {{ address.postal_code|default:'' }}{% if address.postal_code %}, {% endif %}
-                        {{ address.country|default:'Not provided' }}
-                    {% else %}
-                        Not provided
-                    {% endif %}
-                </p>
-                <a href="{% url 'edit_address' %}" class="btn btn-edit">Edit Address</a>
-                <a href="{% url 'logout_user' %}" class="btn btn-logout">Logout</a>
-            </div>
-            <div class="order-history" data-aos="fade-up" data-aos-delay="200">
-                <h3>Order History</h3>
-                {% for transaction in transactions %}
-                    <div class="order-card">
-                        <h4>Order #{{ transaction.tx_ref }} - {{ transaction.transaction_date|date:"F d, Y" }}</h4>
-                        <p><strong>Items:</strong> 
-                            {% for product in transaction.products.all %}
-                                {{ product.name }}{% if not forloop.last %}, {% endif %}
-                            {% empty %}
-                                No items
-                            {% endfor %}
-                        </p>
-                        <p><strong>Total:</strong> ₦{{ transaction.amount }}</p>
-                        <p><strong>Status:</strong> {{ transaction.get_transaction_status_display }}</p>
-                        <a href="{% url 'order_detail' transaction.id %}" class="btn btn-details">View Details</a>
-                    </div>
-                {% empty %}
-                    <div class="order-card">
-                        <p>No orders found.</p>
-                    </div>
-                {% endfor %}
-            </div>
+            <h2>1. Information We Collect</h2>
+            <ul>
+                <li><strong>Personal Information:</strong> When you place an order or create an account, we collect your name, email address, shipping address, and phone number.</li>
+                <li><strong>Payment Information:</strong> Payments are processed securely through Flutterwave, and we do not retain your card details.</li>
+                <li><strong>Usage Data:</strong> We collect data regarding your interactions with our website (e.g., pages visited, duration of visits) through analytical tools.</li>
+            </ul>
+
+            <h2>2. Usage of Your Information</h2>
+            <ul>
+                <li>To process and fulfill your orders</li>
+                <li>To reach you regarding purchases or updates</li>
+                <li>To enhance your shopping experience and optimize website performance</li>
+                <li>To meet legal obligations or security requirements</li>
+            </ul>
+
+            <h2>3. Sharing of Information</h2>
+            <p>
+                We do not sell or lease your personal information. Your data may be shared solely with trusted service providers (e.g., delivery services, payment processors) to facilitate the completion of your order.
+            </p>
+
+            <h2>4. Security</h2>
+            <p>
+                We use secure technologies (SSL encryption, reputable gateways such as Flutterwave) to protect your information.
+            </p>
+
+            <h2>5. Your Rights</h2>
+            <p>
+                You have the right to request access to, correction of, or deletion of your personal data at any time by contacting us at:<br>
+                <a href="mailto:Support@suxesluxthread.com">Support@suxesluxthread.com</a>
+            </p>
         </div>
     </section>
 
@@ -454,14 +333,16 @@
             </div>
         </div>
     </footer>
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <!-- Bootstrap JS and Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- AOS JS -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
+        // Initialize AOS
         AOS.init({
             duration: 800,
-            once: false
+            once: true
         });
     </script>
 </body>
