@@ -1,3 +1,6 @@
 media/
 static/
-SuxesApp/migrations/migrations/
+SuxesApp/migrations/
+db.sqlite3
+SuxesApp/__pycache__/
+manage.py
