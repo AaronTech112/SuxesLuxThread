@@ -1,0 +1,586 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SuXeS Lux Thread - Shop</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- AOS for animations -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Google Fonts (Montserrat for bold, urban typography) -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #fff;
+            color: #000;
+            overflow-x: hidden;
+        }
+        /* Sticky Navbar */
+        .navbar {
+            background-color: #000;
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #fff !important;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+        }
+        .navbar-brand img {
+            width: 40px;
+            margin-right: 10px;
+        }
+        .navbar-nav .nav-link {
+            color: #fff !important;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin: 0 15px;
+            transition: color 0.3s ease;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #999 !important;
+        }
+        /* Cart and Profile Icons */
+        .navbar-icons {
+            display: flex;
+            align-items: center;
+        }
+        .cart-icon {
+            position: relative;
+            color: #fff;
+            font-size: 1.5rem;
+            margin: 0 15px;
+            transition: color 0.3s ease;
+        }
+        .cart-icon:hover {
+            color: #999;
+        }
+        .cart-count {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: #666;
+            color: #fff;
+            font-size: 0.8rem;
+            font-weight: 700;
+            border-radius: 50%;
+            padding: 2px 6px;
+            min-width: 20px;
+            text-align: center;
+        }
+        .profile-icon {
+            color: #fff;
+            font-size: 1.5rem;
+            margin: 0 15px;
+            transition: color 0.3s ease;
+        }
+        .profile-icon:hover {
+            color: #999;
+        }
+        .btn-login {
+            background-color: #fff;
+            color: #000;
+            font-weight: 700;
+            padding: 8px 20px;
+            border-radius: 0;
+            transition: all 0.3s ease;
+        }
+        .btn-login:hover {
+            background-color: #666;
+            color: #fff;
+        }
+        /* Mobile Cart Icon */
+        .cart-mobile {
+            display: none;
+            position: relative;
+            color: #fff;
+            font-size: 1.5rem;
+            margin-left: 15px;
+        }
+        .cart-mobile:hover {
+            color: #999;
+        }
+        /* Shop Section */
+        .shop-section {
+            padding: 80px 0;
+            background-color: #fff;
+        }
+        .shop-section h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .filter-sidebar {
+            background-color: #f8f8f8;
+            padding: 20px;
+        }
+        .filter-sidebar h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        .filter-group {
+            margin-bottom: 20px;
+        }
+        .filter-group label {
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: block;
+        }
+        .filter-group input, .filter-group select {
+            border-radius: 0;
+            border: 1px solid #999;
+        }
+        .size-filter, .color-filter {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .size-filter label, .color-filter label {
+            font-weight: 400;
+            margin-bottom: 0;
+        }
+        .filter-toggle {
+            display: none;
+            background-color: #000;
+            color: #fff;
+            font-weight: 700;
+            padding: 10px;
+            border-radius: 0;
+            width: 100%;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .filter-toggle:hover {
+            background-color: #666;
+        }
+        .product-card {
+            position: relative;
+            overflow: hidden;
+            border: none;
+            background-color: #fff;
+            transition: transform 0.3s ease;
+        }
+        .product-card img {
+            width: 100%;
+            height: auto;
+            transition: transform 0.3s ease;
+        }
+        .product-card:hover img {
+            transform: scale(1.1);
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+        .product-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 15px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .product-card:hover .product-overlay {
+            opacity: 1;
+        }
+        .product-info {
+            display: none;
+            background-color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+        .product-info h5 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .product-info p {
+            font-size: 0.9rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .btn-add-to-cart {
+            background-color: #000;
+            color: #fff;
+            font-weight: 700;
+            padding: 8px 20px;
+            border-radius: 0;
+            transition: all 0.3s ease;
+        }
+        .btn-add-to-cart:hover {
+            background-color: #666;
+            color: #fff;
+        }
+        .pagination {
+            justify-content: center;
+            margin-top: 40px;
+        }
+        .page-link {
+            color: #000;
+            border-radius: 0;
+            border: 1px solid #999;
+            margin: 0 5px;
+        }
+        .page-link:hover {
+            background-color: #666;
+            color: #fff;
+            border-color: #666;
+        }
+        .page-item.active .page-link {
+            background-color: #000;
+            color: #fff;
+            border-color: #000;
+        }
+        /* Footer */
+        .footer {
+            background-color: #000;
+            padding: 40px 0;
+            color: #fff;
+        }
+        .footer a {
+            color: #999;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .footer a:hover {
+            color: #fff;
+        }
+        .social-icons a {
+            font-size: 1.5rem;
+            margin: 0 10px;
+            color: #999;
+        }
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .shop-section h1 {
+                font-size: 1.8rem;
+            }
+            .navbar-brand {
+                font-size: 1.5rem;
+            }
+            .navbar-brand img {
+                width: 30px;
+            }
+            .navbar-icons {
+                display: none;
+            }
+            .cart-mobile {
+                display: inline-block;
+            }
+            .btn-login {
+                margin: 10px 0;
+            }
+            .filter-sidebar {
+                margin-bottom: 20px;
+            }
+            .filter-toggle {
+                display: block;
+            }
+            .filter-content {
+                display: none;
+            }
+            .filter-content.show {
+                display: block;
+            }
+            .size-filter label, .color-filter label {
+                font-size: 0.9rem;
+            }
+            .size-filter input, .color-filter input {
+                transform: scale(0.8);
+            }
+            .product-overlay {
+                display: none;
+            }
+            .product-info {
+                display: block;
+            }
+        }
+        @media (min-width: 769px) {
+            .cart-mobile {
+                display: none;
+            }
+            .filter-toggle {
+                display: none;
+            }
+            .filter-content {
+                display: block !important;
+            }
+            .product-info {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sticky Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <img src="{% static 'images/LOGO  ISOTYOE WHITE.png' %}" style="width: 60px;" alt="SuXeS Lux Thread Logo">
+                <span>SuXeS Lux Thread</span>
+            </a>
+            <a href="{% url 'cart' %}" class="cart-mobile">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-count" id="cartCountMobile">{{ cart_count }}</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" style="">
+                <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="{% url 'shop' %}" id="shopDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Shop
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="shopDropdown">
+                            <li><a class="dropdown-item" href="{% url 'shop' %}?search={{ request.GET.search|urlencode }}">All</a></li>
+                            {% for category in categories %}
+                                <li><a class="dropdown-item" href="{% url 'shop' %}?category={{ category.id }}&search={{ category.name|urlencode }}">{{ category.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'lookbook' %}">Lookbook</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'about' %}">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'contact' %}">Contact</a>
+                    </li>
+                </ul>
+                <div class="navbar-icons ms-3">
+                    <a href="{% url 'cart' %}" class="cart-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count" id="cartCount">{{ cart_count }}</span>
+                    </a>
+                    <a href="{% url 'profile' %}" class="profile-icon">
+                        <i class="fas fa-user"></i>
+                    </a>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'logout_user' %}" class="btn btn-login" title="Logout">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </a>
+                    {% else %}
+                        <a href="{% url 'login_user' %}" class="btn btn-login">Login</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- Shop Section -->
+    <section class="shop-section">
+        <div class="container">
+            <h1 data-aos="fade-up">Shop All</h1>
+            <!-- Search Bar -->
+            <div class="search-bar mb-4" data-aos="fade-up">
+                <form id="searchForm" method="GET" action="{% url 'shop' %}" class="d-flex">
+                    <input type="text" id="searchInput" name="search" class="form-control me-2" placeholder="Search by product or category..." value="{{ search_query|default:'' }}">
+                    <button type="submit" class="btn btn-bark" style="background-color: black; color: white;" >Search</button>
+                    <a href="{% url 'shop' %}" class="btn btn-secondary ms-2">Show All Products</a>
+                </form>
+            </div>
+            <div class="row">
+                <!-- Product Grid -->
+                <div class="col-12">
+                    <div class="row" id="productGrid">
+                        {% for product in products %}
+                            <div class="col-6 col-md-4 col-sm-6 mb-4 product-item"
+                                data-aos="fade-up"
+                                data-aos-delay="{% cycle '100' '200' '300' '400' '500' '600' %}"
+                                data-name="{{ product.name|lower|default:'' }}"
+                                data-category="{{ product.category.name|lower|default:'' }}">
+                                <div class="product-card">
+                                    {% with product.images.first as image %}
+                                        {% if image %}
+                                            <img src="{{ image.image.url }}" alt="{{ product.name|default:'Product' }}">
+                                        {% else %}
+                                            <img src="{% static 'images/placeholder.jpg' %}" alt="{{ product.name|default:'Product' }}">
+                                        {% endif %}
+                                    {% endwith %}
+                                    <div class="product-overlay">
+                                        <h5>{{ product.name|default:'Unnamed Product' }}</h5>
+                                        <p>₦{{ product.price|default:0 }}</p>
+                                        <a href="{% url 'product_detail' product.id %}" class="btn btn-add-to-cart"
+                                       >Add to Cart</a>
+                                    </div>
+                                    <div class="product-info">
+                                        <h5>{{ product.name|default:'Unnamed Product' }}</h5>
+                                        <p>₦{{ product.price|default:0 }}</p>
+                                        <a href="{% url 'product_detail' product.id %}" class="btn btn-add-to-cart"
+                                       >Add to Cart</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% empty %}
+                            <div class="col-12">
+                                <p>No products found. Try adjusting your search or adding products to the database.</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <!-- Pagination -->
+                    <nav aria-label="Product pagination">
+                        <ul class="pagination">
+                            {% if products.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ products.previous_page_number }}&search={{ search_query|urlencode }}" aria-label="Previous">
+                                        <span aria-hidden="true">«</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+                            {% for num in products.paginator.page_range %}
+                                <li class="page-item {% if products.number == num %}active{% endif %}">
+                                    <a class="page-link" href="?page={{ num }}&search={{ search_query|urlencode }}">{{ num }}</a>
+                                </li>
+                            {% endfor %}
+                            {% if products.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ products.next_page_number }}&search={{ search_query|urlencode }}" aria-label="Next">
+                                        <span aria-hidden="true">»</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <h5>SuXeS Lux Thread</h5>
+                    <p>Forever Relentless. Blending luxury with street culture.</p>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'shop' %}">Shop</a></li>
+                        <li><a href="{% url 'about' %}">About</a></li>
+                        <li><a href="{% url 'contact' %}">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h5>Follow Us</h5>
+                    <div class="social-icons">
+                        <a href="https://www.instagram.com/suxesluxthread_?igsh=bmgzM3h1amdhZm1r&utm_source=qr" target="_blank" ><i class="fab fa-instagram"></i></a>
+                        <a href="https://x.com/suxesluxthread?s=09" target="_blank" ><i class="fab fa-twitter"></i></a>
+                        <a href="https://vm.tiktok.com/ZMSMBxJxd/"  target="_blank"><i class="fab fa-tiktok"></i></a>
+                        <a href="https://www.facebook.com/share/1AeFMAzyfU/?mibextid=wwXIfr"  target="_blank"><i class="fab fa-facebook"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="text-center">
+                <p><a href="{% url 'terms' %}">Terms & Conditions</a> | <a href="{% url 'privacy_policy' %}">Privacy Policy</a></p>
+                <p>© 2025 SuXeS Lux Thread. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Client-Side Search -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            const productItems = document.querySelectorAll('.product-item');
+            const searchForm = document.getElementById('searchForm');
+
+            function filterProducts() {
+                const searchTerm = searchInput.value.toLowerCase();
+                let visibleCount = 0;
+
+                productItems.forEach(item => {
+                    const name = item.dataset.name || '';
+                    const category = item.dataset.category || '';
+
+                    if (name.includes(searchTerm) || category.includes(searchTerm)) {
+                        item.style.display = 'block';
+                        visibleCount++;
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+                console.log(`Visible products: ${visibleCount}`);
+            }
+
+            // Event listeners for client-side search
+            searchInput.addEventListener('input', filterProducts);
+
+            // Submit form on Enter key
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    searchForm.submit();
+                }
+            });
+
+            // Initial filter
+            filterProducts();
+        });
+    </script>
+
+    <!-- Bootstrap JS and Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- AOS JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            once: true
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Cart item count
+        let cartCount = 0;
+        const cartCountElement = document.getElementById('cartCount');
+        const cartCountMobileElement = document.getElementById('cartCountMobile');
+        function updateCartCount() {
+            cartCountElement.textContent = cartCount;
+            cartCountMobileElement.textContent = cartCount;
+        }
+        // Add to cart functionality
+        function addToCart(name, price) {
+            cartCount++;
+            updateCartCount();
+            // Placeholder: Add to localStorage or backend
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart.push({ name, price, quantity: 1 });
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
+        // Initialize cart count
+        updateCartCount();
+    </script>
+</body>
+</html>

@@ -1,0 +1,349 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SuXeS Lux Thread - Terms & Conditions</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- AOS for animations -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Google Fonts (Montserrat for bold, urban typography) -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #fff;
+            color: #000;
+            overflow-x: hidden;
+        }
+        /* Sticky Navbar */
+        .navbar {
+            background-color: #000;
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #fff !important;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+        }
+        .navbar-brand img {
+            width: 40px;
+            margin-right: 10px;
+        }
+        .navbar-nav .nav-link {
+            color: #fff !important;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin: 0 15px;
+            transition: color 0.3s ease;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #999 !important;
+        }
+        .navbar-icons {
+            display: flex;
+            align-items: center;
+        }
+        .cart-icon {
+            position: relative;
+            color: #fff;
+            font-size: 1.5rem;
+            margin: 0 15px;
+            transition: color 0.3s ease;
+        }
+        .cart-icon:hover {
+            color: #999;
+        }
+        .cart-count {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: #666;
+            color: #fff;
+            font-size: 0.8rem;
+            font-weight: 700;
+            border-radius: 50%;
+            padding: 2px 6px;
+            min-width: 20px;
+            text-align: center;
+        }
+        .profile-icon {
+            color: #fff;
+            font-size: 1.5rem;
+            margin: 0 15px;
+            transition: color 0.3s ease;
+        }
+        .profile-icon:hover {
+            color: #999;
+        }
+        .btn-login {
+            background-color: #fff;
+            color: #000;
+            font-weight: 700;
+            padding: 8px 20px;
+            border-radius: 0;
+            transition: all 0.3s ease;
+        }
+        .btn-login:hover {
+            background-color: #666;
+            color: #fff;
+        }
+        .cart-mobile {
+            display: none;
+            position: relative;
+            color: #fff;
+            font-size: 1.5rem;
+            margin-left: 15px;
+        }
+        .cart-mobile:hover {
+            color: #999;
+        }
+        /* Terms Section */
+        .terms-section {
+            padding: 60px 0;
+            background-color: #fff;
+        }
+        .terms-section h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        .terms-section h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        .terms-section p, .terms-section li {
+            font-size: 1.1rem;
+            font-weight: 400;
+            line-height: 1.6;
+            color: #333;
+        }
+        .terms-section ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+        .terms-section a {
+            color: #000;
+            font-weight: 700;
+            text-decoration: underline;
+            transition: color 0.3s ease;
+        }
+        .terms-section a:hover {
+            color: #666;
+        }
+        /* Footer */
+        .footer {
+            background-color: #000;
+            padding: 40px 0;
+            color: #fff;
+        }
+        .footer a {
+            color: #999;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .footer a:hover {
+            color: #fff;
+        }
+        .social-icons a {
+            font-size: 1.5rem;
+            margin: 0 10px;
+            color: #999;
+        }
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .terms-section h1 {
+                font-size: 1.8rem;
+            }
+            .terms-section h2 {
+                font-size: 1.5rem;
+            }
+            .terms-section p, .terms-section li {
+                font-size: 1rem;
+            }
+            .navbar-brand {
+                font-size: 1.5rem;
+            }
+            .navbar-brand img {
+                width: 30px;
+            }
+            .navbar-icons {
+                display: none;
+            }
+            .cart-mobile {
+                display: inline-block;
+            }
+            .btn-login {
+                margin: 10px 0;
+            }
+        }
+        @media (min-width: 769px) {
+            .cart-mobile {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sticky Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <img src="{% static 'images/LOGO  ISOTYOE WHITE.png' %}" style="width: 60px;" alt="SuXeS Lux Thread Logo">
+                <span>SuXeS Lux Thread</span>
+            </a>
+            <a href="{% url 'cart' %}" class="cart-mobile">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-count" id="cartCountMobile">{{ cart_count }}</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" style="">
+                <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="{% url 'shop' %}" id="shopDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Shop
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="shopDropdown">
+                            <li><a class="dropdown-item" href="{% url 'shop' %}?search={{ request.GET.search|urlencode }}">All</a></li>
+                            {% for category in categories %}
+                                <li><a class="dropdown-item" href="{% url 'shop' %}?category={{ category.id }}&search={{ category.name|urlencode }}">{{ category.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'lookbook' %}">Lookbook</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'about' %}">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'contact' %}">Contact</a>
+                    </li>
+                </ul>
+                <div class="navbar-icons ms-3">
+                    <a href="{% url 'cart' %}" class="cart-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count" id="cartCount">{{ cart_count }}</span>
+                    </a>
+                    <a href="{% url 'profile' %}" class="profile-icon">
+                        <i class="fas fa-user"></i>
+                    </a>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'logout_user' %}" class="btn btn-login" title="Logout">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </a>
+                    {% else %}
+                        <a href="{% url 'login_user' %}" class="btn btn-login">Login</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Privacy Policy Section -->
+    <section class="terms-section" data-aos="fade-up">
+        <div class="container">
+            <h1>Privacy Policy</h1>
+            <p>
+                At Suxes Lux Thread, we prioritize your privacy and are dedicated to safeguarding your personal information. This Privacy Policy delineates our practices regarding the collection, utilization, and protection of your data while engaging with our website.
+            </p>
+
+            <h2>1. Information We Collect</h2>
+            <ul>
+                <li><strong>Personal Information:</strong> When you place an order or create an account, we collect your name, email address, shipping address, and phone number.</li>
+                <li><strong>Payment Information:</strong> Payments are processed securely through Flutterwave, and we do not retain your card details.</li>
+                <li><strong>Usage Data:</strong> We collect data regarding your interactions with our website (e.g., pages visited, duration of visits) through analytical tools.</li>
+            </ul>
+
+            <h2>2. Usage of Your Information</h2>
+            <ul>
+                <li>To process and fulfill your orders</li>
+                <li>To reach you regarding purchases or updates</li>
+                <li>To enhance your shopping experience and optimize website performance</li>
+                <li>To meet legal obligations or security requirements</li>
+            </ul>
+
+            <h2>3. Sharing of Information</h2>
+            <p>
+                We do not sell or lease your personal information. Your data may be shared solely with trusted service providers (e.g., delivery services, payment processors) to facilitate the completion of your order.
+            </p>
+
+            <h2>4. Security</h2>
+            <p>
+                We use secure technologies (SSL encryption, reputable gateways such as Flutterwave) to protect your information.
+            </p>
+
+            <h2>5. Your Rights</h2>
+            <p>
+                You have the right to request access to, correction of, or deletion of your personal data at any time by contacting us at:<br>
+                <a href="mailto:Support@suxesluxthread.com">Support@suxesluxthread.com</a>
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <h5>SuXeS Lux Thread</h5>
+                    <p>Forever Relentless. Blending luxury with street culture.</p>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'shop' %}">Shop</a></li>
+                        <li><a href="{% url 'about' %}">About</a></li>
+                        <li><a href="{% url 'contact' %}">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h5>Follow Us</h5>
+                    <div class="social-icons">
+                        <a href="https://www.instagram.com/suxesluxthread_?igsh=bmgzM3h1amdhZm1r&utm_source=qr" target="_blank" ><i class="fab fa-instagram"></i></a>
+                        <a href="https://x.com/suxesluxthread?s=09" target="_blank" ><i class="fab fa-twitter"></i></a>
+                        <a href="https://vm.tiktok.com/ZMSMBxJxd/"  target="_blank"><i class="fab fa-tiktok"></i></a>
+                        <a href="https://www.facebook.com/share/1AeFMAzyfU/?mibextid=wwXIfr"  target="_blank"><i class="fab fa-facebook"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="text-center">
+                <p><a href="{% url 'terms' %}">Terms & Conditions</a> | <a href="{% url 'privacy_policy' %}">Privacy Policy</a></p>
+                <p>© 2025 SuXeS Lux Thread. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS and Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- AOS JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            once: true
+        });
+    </script>
+</body>
+</html>
