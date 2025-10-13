@@ -275,6 +275,28 @@
                 display: none;
             }
         }
+        
+        /* WhatsApp Float Button */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25D366;
+            color: #fff;
+            border-radius: 50%;
+            font-size: 30px;
+            padding: 10px;
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            line-height: 30px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .whatsapp-float:hover {
+            color: #fff;
+            transform: scale(1.1);
+        }
     </style>
 <style>
     /* Hero Section */
@@ -579,4 +601,9 @@
          once: true
      });
  </script>
+ 
+ <!-- WhatsApp Float Button -->
+ <a href="https://wa.me/2348129956528" class="whatsapp-float" target="_blank">
+     <i class="fab fa-whatsapp"></i>
+ </a>
 </html>
