@@ -474,7 +474,7 @@
     <!-- Models Showcase Section -->
     <section class="models-section">
         <div class="container">
-            <h2 data-aos="fade-up">Wear your mindset.</h2>
+            <h2 data-aos="fade-up">Wear your mindset</h2>
             <div class="row">
                 <div class="col-md-4 col-sm-6 mb-4" data-aos="fade-up" data-aos-delay="100">
                     <div class="model-card">
@@ -522,7 +522,14 @@
                         {% endif %}
                         <div class="product-overlay">
                             <h5>{{ product.name }}</h5>
+                            {% if product.slash_price %}
+                            <p>
+                                <span style="text-decoration: line-through; color: #999;">₦{{ product.slash_price }}</span>
+                                <span class="ms-2" style="color: #fff; font-weight: bold;">₦{{ product.price }}</span>
+                            </p>
+                            {% else %}
                             <p>₦{{ product.price }}</p>
+                            {% endif %}
                             <a href="{% url 'product_detail' product.id %}" class="btn btn-sm btn-shop">Add to Cart</a>
                         </div>
                     </div>
