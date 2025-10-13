@@ -25,5 +25,6 @@ urlpatterns = [
     path('terms/', views.terms, name='terms'),
     path('privacy_policy/', views.privacy_policy, name='privacy_policy'),
     path('lookbook/', views.lookbook, name='lookbook'),
-    path('thank-you/<int:transaction_id>/', views.thank_you, name='thank_you'), 
+    path('thank-you/<int:transaction_id>/', views.thank_you, name='thank_you'),
+    path('upcoming-merch/', views.upcoming_merch, name='upcoming_merch'),
 ]

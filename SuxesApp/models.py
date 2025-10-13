@@ -167,3 +167,33 @@ class ShippingFee(models.Model):
     class Meta:
         verbose_name = 'Shipping Fee'
         verbose_name_plural = 'Shipping Fees'
+
+# New models for upcoming merch
+class UpcomingMerch(models.Model):
+    name = models.CharField(max_length=200)
+    description = models.TextField()
+    expected_price = models.DecimalField(max_digits=10, decimal_places=2)
+    release_date = models.DateField()
+    image = models.ImageField(upload_to='upcoming_merch/')
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Upcoming Merch'
+        verbose_name_plural = 'Upcoming Merch'
+        ordering = ['release_date']
+
+class EmailSubscriber(models.Model):
+    email = models.EmailField(unique=True)
+    subscribed_at = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.email
+
+    class Meta:
+        verbose_name = 'Email Subscriber'
+        verbose_name_plural = 'Email Subscribers'

@@ -276,6 +276,124 @@
             }
         }
     </style>
+<style>
+    /* Hero Section */
+    .upcoming-hero {
+        background-color: #000;
+        color: #fff;
+        padding: 120px 0;
+        text-align: center;
+        background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("{% static 'images/hero-bg.jpg' %}");
+        background-size: cover;
+        background-position: center;
+        position: relative;
+    }
+
+    .upcoming-hero h1 {
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin-bottom: 20px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+
+    .upcoming-hero p {
+        font-size: 1.2rem;
+        max-width: 600px;
+        margin: 0 auto 30px;
+        color: #ddd;
+    }
+
+    /* Subscription Form */
+    .subscription-section {
+        background-color: #f8f9fa;
+        padding: 60px 0;
+        text-align: center;
+    }
+
+    .subscription-form {
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 30px;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .subscription-form h3 {
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    /* Upcoming Products Grid */
+    .upcoming-grid {
+        padding: 80px 0;
+    }
+
+    .upcoming-card {
+        background: #fff;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        margin-bottom: 30px;
+        transition: transform 0.3s ease;
+    }
+
+    .upcoming-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .upcoming-card img {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+    }
+
+    .upcoming-card-content {
+        padding: 20px;
+    }
+
+    .upcoming-card h4 {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+        color: #333;
+    }
+
+    .upcoming-card .price {
+        font-size: 1.2rem;
+        color: #000;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .upcoming-card .release-date {
+        color: #666;
+        font-size: 0.9rem;
+    }
+
+    .upcoming-card .description {
+        color: #666;
+        margin: 15px 0;
+        line-height: 1.6;
+    }
+
+    /* Countdown Timer */
+    .countdown {
+        background: #000;
+        color: #fff;
+        padding: 10px 15px;
+        border-radius: 5px;
+        display: inline-block;
+        margin-top: 15px;
+    }
+
+    /* Alert Messages */
+    .alert {
+        border-radius: 0;
+        margin-bottom: 0;
+        text-align: center;
+    }
+</style>
 </head>
 <body>
     <!-- Sticky Navbar -->
@@ -341,38 +459,71 @@
         </div>
     </nav>
 
+<!-- Hero Section -->
+<section class="upcoming-hero">
+    <div class="container">
+        <h1>Coming Soon</h1>
+        <p>Be the first to know about our exclusive drops and upcoming collections. Don't miss out on our most anticipated releases.</p>
+    </div>
+</section>
 
-    <!-- Hero Section -->
-    <section class="login-hero">
-        <div class="container">
-            <h1>Login</h1>
+<!-- Success Message -->
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{% if message.tags %}{{ message.tags }}{% endif %} alert-dismissible fade show">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-    </section>
+    {% endfor %}
+{% endif %}
 
-    <!-- Login Section -->
-    <section class="login-section">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-6">
-                    <h2>Sign In</h2>
-                    <form method="post" >
-                        {% csrf_token %}
-                        <input type="email" class="form-control" name="email" placeholder="Email" required>
-                        <input type="password" class="form-control" name= "password" placeholder="Password" required>
-                        <button type="submit" class="btn btn-login">Login</button>
 
-                    </form>
-                    <div class="login-links mt-3">
-                        <p>Don't have an account? <a href="{% url 'register' %}">Register here</a></p>
-                    </div>
-                    <div class="trust-badges">
-                        <img src="assets/images/pci-dss.png" alt="PCI DSS Compliant">
-                        <img src="assets/images/ssl-secure.png" alt="SSL Secure">
+<!-- Upcoming Products Grid -->
+<section class="upcoming-grid">
+    <div class="container">
+        <div class="row">
+            {% for item in upcoming_items %}
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="{{ forloop.counter|add:'1' }}00">
+                <div class="upcoming-card">
+                    <img src="{{ item.image.url }}" alt="{{ item.name }}">
+                    <div class="upcoming-card-content">
+                        <h4>{{ item.name }}</h4>
+                        <div class="price">Expected Price: ₦{{ item.expected_price }}</div>
+                        <p class="description">{{ item.description }}</p>
+                        <div class="release-date">Release Date: {{ item.release_date|date:"F d, Y" }}</div>
+                        <div class="countdown">
+                            Coming in {{ item.release_date|timeuntil }}
+                        </div>
                     </div>
                 </div>
             </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <h3>No upcoming merch at the moment. Stay tuned!</h3>
+                <p>Subscribe to get notified when new items are added.</p>
+            </div>
+            {% endfor %}
         </div>
-    </section>
+    </div>
+</section>
+
+<!-- Subscription Form Section -->
+<section class="subscription-section">
+    <div class="container">
+        <div class="subscription-form">
+            <h3>Get Notified</h3>
+            <p>Subscribe to receive updates about new releases and exclusive offers.</p>
+            <form method="POST">
+                {% csrf_token %}
+                <div class="input-group mb-3">
+                    {{ form.email }}
+                    <button class="btn btn-dark" type="submit">Subscribe</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
 
     <!-- Footer -->
     <footer class="footer">
@@ -420,5 +571,12 @@
          e.src=" `https://omnisnippet1.com/inshop/launcher-v2.js` "; 
          var t=document.getElementsByTagName("script")[0]; 
          t.parentNode.insertBefore(e,t)}(); 
+ </script>
+ <script>
+     // Initialize AOS
+     AOS.init({
+         duration: 1000,
+         once: true
+     });
  </script>
 </html>

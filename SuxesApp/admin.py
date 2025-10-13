@@ -14,6 +14,8 @@ from .models import (
     Size,
     ProductImage,
     ShippingFee,
+    UpcomingMerch,
+    EmailSubscriber,
 )
 
 @admin.register(Transaction)
@@ -92,3 +94,18 @@ class ColorAdmin(admin.ModelAdmin):
     search_fields = ('name',)
 
 admin.site.register(ShippingFee)
+
+@admin.register(UpcomingMerch)
+class UpcomingMerchAdmin(admin.ModelAdmin):
+    list_display = ('name', 'expected_price', 'release_date', 'is_active')
+    list_filter = ('is_active', 'release_date')
+    search_fields = ('name', 'description')
+    list_editable = ('is_active',)
+
+@admin.register(EmailSubscriber)
+class EmailSubscriberAdmin(admin.ModelAdmin):
+    list_display = ('email', 'subscribed_at', 'is_active')
+    list_filter = ('is_active', 'subscribed_at')
+    search_fields = ('email',)
+    list_editable = ('is_active',)
+    readonly_fields = ('subscribed_at',)

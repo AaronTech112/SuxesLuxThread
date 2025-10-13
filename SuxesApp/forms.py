@@ -1,7 +1,7 @@
 # forms.py
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import CustomUser, Address
+from .models import CustomUser, Address, EmailSubscriber
 
 class RegisterForm(UserCreationForm):
     street      = forms.CharField(max_length=255, required=False)
@@ -59,12 +59,23 @@ class CheckoutForm(forms.ModelForm):
 class AddressForm(forms.ModelForm):
     class Meta:
         model = Address
-        fields = ['street', 'city', 'state', 'postal_code', 'country','phone_number']
+        fields = ['street', 'city', 'state', 'postal_code', 'country', 'phone_number']
         widgets = {
-            'street': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter street address'}),
-            'city': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter city'}),
-            'state': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter state'}),
-            'postal_code': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter postal code'}),
-            'country': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter country'}),
-            'phone_number': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Phone Number'}),
+            'street': forms.TextInput(attrs={'class': 'form-control'}),
+            'city': forms.TextInput(attrs={'class': 'form-control'}),
+            'state': forms.TextInput(attrs={'class': 'form-control'}),
+            'postal_code': forms.TextInput(attrs={'class': 'form-control'}),
+            'country': forms.TextInput(attrs={'class': 'form-control'}),
+            'phone_number': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+
+class EmailSubscriptionForm(forms.ModelForm):
+    class Meta:
+        model = EmailSubscriber
+        fields = ['email']
+        widgets = {
+            'email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter your email for exclusive updates'
+            })
         }

@@ -2,9 +2,12 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import RegisterForm , CheckoutForm, AddressForm
+from .forms import RegisterForm, CheckoutForm, AddressForm, EmailSubscriptionForm
 from django.contrib import messages
-from .models import Cart, CartItem, Product, Category,Transaction,Size, Color, ShippingFee
+from .models import (
+    Cart, CartItem, Product, Category, Transaction, Size, 
+    Color, ShippingFee, UpcomingMerch, EmailSubscriber
+)
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.conf import settings
@@ -533,3 +536,23 @@ def lookbook(request):
         'products': products,
     }
     return render(request, 'SuxesApp/lookbook.html', context)
+
+def upcoming_merch(request):
+    categories = Category.objects.all()
+    upcoming_items = UpcomingMerch.objects.filter(is_active=True).order_by('release_date')
+    
+    if request.method == 'POST':
+        form = EmailSubscriptionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Thank you for subscribing! You will be notified about new releases.')
+            return redirect('upcoming_merch')
+    else:
+        form = EmailSubscriptionForm()
+
+    context = {
+        'categories': categories,
+        'upcoming_items': upcoming_items,
+        'form': form,
+    }
+    return render(request, 'SuxesApp/upcoming_merch.html', context)
