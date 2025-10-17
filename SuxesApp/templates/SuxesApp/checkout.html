@@ -549,17 +549,13 @@
                 <div class="cart-summary">
                     <h4 class="mb-3">Order Summary</h4>
                     <p class="d-flex justify-content-between">
-                        <span>Subtotal:</span>
+                        <span>Total:</span>
                         <span>₦{{ subtotal|floatformat:0 }}</span>
                     </p>
-                    <p class="d-flex justify-content-between">
-                        <span>Shipping:</span>
-                        <span>₦{{ shipping_fee|floatformat:0 }}</span>
+                    <p class="text-muted small">
+                        <em>* Shipping fee will be calculated based on your location and communicated via email.</em>
                     </p>
                     <hr />
-                    <p class="d-flex justify-content-between fw-bold">
-                        <span>Total:</span>
-                        <span>₦{{ total_price|floatformat:0 }}</span>
                     </p>
                     <div class="d-grid gap-2 mt-4">
                         <form method="POST" action="{% url 'checkout' %}">

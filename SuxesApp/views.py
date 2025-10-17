@@ -6,7 +6,7 @@ from .forms import RegisterForm, CheckoutForm, AddressForm, EmailSubscriptionFor
 from django.contrib import messages
 from .models import (
     Cart, CartItem, Product, Category, Transaction, Size, 
-    Color, ShippingFee, UpcomingMerch, EmailSubscriber
+    Color, UpcomingMerch, EmailSubscriber
 )
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
@@ -66,10 +66,6 @@ def checkout(request):
     categories = Category.objects.all()
     cart = None
     cart_items = []
-    total_price = 0
-    # Get the default shipping fee from the database (the latest active one)
-    shipping_fee_obj = ShippingFee.objects.filter(is_active=True).order_by('-id').first()
-    shipping_fee = shipping_fee_obj.fee   # Default to 2000 if not set
     subtotal = 0
     address = None
 
@@ -77,9 +73,7 @@ def checkout(request):
         cart = Cart.objects.get(user=request.user)
         cart_items = cart.items.all()
         subtotal = sum(item.total_price() for item in cart_items)
-        shipping_fee_obj = ShippingFee.objects.filter(is_active=True).order_by('-id').first()
-        shipping_fee = shipping_fee_obj.fee 
-        total_price = subtotal + shipping_fee
+        total_price = subtotal
         address = request.user.address if hasattr(request.user, 'address') and request.user.address else None
     except Cart.DoesNotExist:
         messages.error(request, "Your cart is empty.")
@@ -120,7 +114,6 @@ def checkout(request):
         'cart': cart,
         'cart_items': cart_items,
         'subtotal': subtotal,
-        'shipping_fee': shipping_fee,
         'total_price': total_price,
         'form': form,
         'categories': categories,
@@ -416,8 +409,6 @@ def cart(request):
     cart = None
     cart_items = []
     total_price = 0
-    shipping_fee_obj = ShippingFee.objects.filter(is_active=True).order_by('-id').first()
-    shipping_fee = shipping_fee_obj.fee  # Example fixed shipping fee in NGN
     subtotal = 0
 
     try:
@@ -431,9 +422,7 @@ def cart(request):
         if cart:
             cart_items = cart.items.all()
             subtotal = sum(item.total_price() for item in cart_items)
-            shipping_fee_obj = ShippingFee.objects.filter(is_active=True).order_by('-id').first()
-            shipping_fee = shipping_fee_obj.fee 
-            total_price = subtotal + shipping_fee
+            total_price = subtotal
 
     except Cart.DoesNotExist:
         pass
@@ -445,7 +434,6 @@ def cart(request):
         'cart': cart,
         'cart_items': cart_items,
         'subtotal': subtotal,
-        'shipping_fee': shipping_fee,
         'total_price': total_price,
         'categories': categories,
         'recommended_products': recommended_products,

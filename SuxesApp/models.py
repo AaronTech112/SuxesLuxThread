@@ -157,17 +157,6 @@ class CartItem(models.Model):
     def total_price(self):
         return self.product.price * self.quantity
 
-class ShippingFee(models.Model):
-    fee = models.PositiveIntegerField(default=0, help_text="Shipping fee for the order")
-    is_active = models.BooleanField(default=True)
-
-    def __str__(self):
-        return f"Shipping Fee: {self.fee}"
-
-    class Meta:
-        verbose_name = 'Shipping Fee'
-        verbose_name_plural = 'Shipping Fees'
-
 # New models for upcoming merch
 class UpcomingMerch(models.Model):
     name = models.CharField(max_length=200)

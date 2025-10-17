@@ -13,7 +13,6 @@ from .models import (
     Color,
     Size,
     ProductImage,
-    ShippingFee,
     UpcomingMerch,
     EmailSubscriber,
 )
@@ -92,8 +91,6 @@ class SizeAdmin(admin.ModelAdmin):
 class ColorAdmin(admin.ModelAdmin):
     list_display = ('name', 'hex_code')
     search_fields = ('name',)
-
-admin.site.register(ShippingFee)
 
 @admin.register(UpcomingMerch)
 class UpcomingMerchAdmin(admin.ModelAdmin):
