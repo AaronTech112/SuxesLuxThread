@@ -6,6 +6,8 @@ from django.contrib.auth import views as auth_views
 # Create your views here.
 urlpatterns = [
     path('', views.home, name='home'),    
+    path('get-discount-code/', views.get_discount_code, name='get_discount_code'),
+    path('apply-discount-code/', views.apply_discount_code, name='apply_discount_code'),
     path('register', views.register, name='register'),
     path('shop/', views.shop, name='shop'),
     path('login_user', views.login_user, name='login_user'),

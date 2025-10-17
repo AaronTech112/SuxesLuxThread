@@ -13,10 +13,13 @@ from django.views.decorators.http import require_POST
 from django.conf import settings
 import uuid
 import requests
+import random
+import string
 from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.http import JsonResponse
 
 # Create your views here.
 def home(request):
@@ -67,13 +70,55 @@ def checkout(request):
     cart = None
     cart_items = []
     subtotal = 0
+    total_price = 0
     address = None
+    applied_discount = None
+    discount_amount = 0
 
     try:
         cart = Cart.objects.get(user=request.user)
         cart_items = cart.items.all()
         subtotal = sum(item.total_price() for item in cart_items)
-        total_price = subtotal
+        
+        # Check for applied discount code in session
+        if request.session.get('discount_code'):
+            try:
+                from decimal import Decimal
+                subscriber = EmailSubscriber.objects.get(
+                    discount_code=request.session['discount_code'],
+                    code_used=False,
+                    is_active=True
+                )
+                stored_cart_total = Decimal(str(request.session.get('cart_total', '0')))
+                
+                # Verify the cart total hasn't changed significantly
+                if abs(stored_cart_total - subtotal) < Decimal('1'):  # Allow for minor rounding differences
+                    if subtotal >= 150000:
+                        stored_discount = request.session.get('discount_amount', '0')
+                        discount_amount = Decimal(str(stored_discount))
+                        applied_discount = subscriber
+                        total_price = subtotal - discount_amount
+                    else:
+                        # Clear discount if cart total drops below threshold
+                        request.session.pop('discount_code', None)
+                        request.session.pop('cart_total', None)
+                        request.session.pop('discount_amount', None)
+                        total_price = subtotal
+                else:
+                    # Cart total has changed significantly, clear discount
+                    request.session.pop('discount_code', None)
+                    request.session.pop('cart_total', None)
+                    request.session.pop('discount_amount', None)
+                    total_price = subtotal
+            except EmailSubscriber.DoesNotExist:
+                # Clear invalid discount code
+                request.session.pop('discount_code', None)
+                request.session.pop('cart_total', None)
+                request.session.pop('discount_amount', None)
+                total_price = subtotal
+        else:
+            total_price = subtotal
+            
         address = request.user.address if hasattr(request.user, 'address') and request.user.address else None
     except Cart.DoesNotExist:
         messages.error(request, "Your cart is empty.")
@@ -117,6 +162,8 @@ def checkout(request):
         'total_price': total_price,
         'form': form,
         'categories': categories,
+        'applied_discount': applied_discount,
+        'discount_amount': discount_amount,
     }
     return render(request, 'SuxesApp/checkout.html', context)
 
@@ -410,8 +457,11 @@ def cart(request):
     cart_items = []
     total_price = 0
     subtotal = 0
+    applied_discount = None
+    discount_amount = 0
 
     try:
+        # Get the cart
         if request.user.is_authenticated:
             cart = Cart.objects.get(user=request.user)
         else:
@@ -422,7 +472,42 @@ def cart(request):
         if cart:
             cart_items = cart.items.all()
             subtotal = sum(item.total_price() for item in cart_items)
-            total_price = subtotal
+            
+            # Handle discount code
+            discount_code = request.session.get('discount_code')
+            if discount_code and subtotal >= 150000:
+                try:
+                    subscriber = EmailSubscriber.objects.get(
+                        discount_code=discount_code,
+                        code_used=False,
+                        is_active=True
+                    )
+                    # Use stored discount amount or calculate new one
+                    from decimal import Decimal
+                    stored_discount = request.session.get('discount_amount')
+                    if stored_discount:
+                        discount_amount = Decimal(stored_discount)
+                    else:
+                        discount_amount = subtotal * Decimal('0.10')
+                    total_price = subtotal - discount_amount
+                    applied_discount = subscriber
+                except EmailSubscriber.DoesNotExist:
+                    # Clear invalid discount
+                    request.session.pop('discount_code', None)
+                    request.session.pop('cart_total', None)
+                    request.session.pop('discount_amount', None)
+                    total_price = subtotal
+            else:
+                # Clear discount if total is below threshold
+                if discount_code and subtotal < 150000:
+                    messages.warning(request, 
+                        'Your cart total is now below ₦150,000. '
+                        'The discount code has been removed.'
+                    )
+                    request.session.pop('discount_code', None)
+                    request.session.pop('cart_total', None)
+                    request.session.pop('discount_amount', None)
+                total_price = subtotal
 
     except Cart.DoesNotExist:
         pass
@@ -524,6 +609,119 @@ def lookbook(request):
         'products': products,
     }
     return render(request, 'SuxesApp/lookbook.html', context)
+
+@require_POST
+def get_discount_code(request):
+    email = request.POST.get('email')
+    if not email:
+        return JsonResponse({'error': 'Email is required'}, status=400)
+
+    # Generate random discount code
+    code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
+
+    # Save or update subscriber with discount code
+    subscriber, created = EmailSubscriber.objects.get_or_create(email=email)
+    if not created and subscriber.code_used:
+        return JsonResponse({'error': 'Discount code already used'}, status=400)
+
+    subscriber.discount_code = code
+    subscriber.save()
+
+    return JsonResponse({
+        'success': True,
+        'discount_code': code,
+        'message': 'Your discount code has been sent! Use this code at checkout for 10% off orders above ₦150,000.'
+    })
+
+@require_POST
+def apply_discount_code(request):
+    """Apply discount code to the current cart."""
+    try:
+        # Get the discount code
+        code = request.POST.get('discount_code', '').strip().upper()  # Convert to uppercase for consistency
+        if not code:
+            messages.error(request, 'Please enter a discount code.')
+            return redirect('cart')
+
+        # Get the cart
+        cart = None
+        if request.user.is_authenticated:
+            cart = Cart.objects.filter(user=request.user).first()
+        else:
+            session_key = request.session.session_key
+            if session_key:
+                cart = Cart.objects.filter(session_key=session_key).first()
+
+        if not cart:
+            messages.error(request, 'No active cart found.')
+            return redirect('cart')
+
+        if not cart.items.exists():
+            messages.error(request, 'Your cart is empty.')
+            return redirect('cart')
+
+        # Calculate cart total first
+        cart_total = sum(item.total_price() for item in cart.items.all())
+        if cart_total < 150000:
+            remaining = 150000 - cart_total
+            messages.error(request, 
+                f'Your order must be above ₦150,000 to use a discount code. '
+                f'Add ₦{remaining:,.2f} more to qualify.'
+            )
+            return redirect('cart')
+
+        # Check if code is already applied
+        if request.session.get('discount_code') == code:
+            messages.info(request, 'This discount code is already applied to your cart.')
+            return redirect('cart')
+
+        # Validate the discount code
+        try:
+            subscriber = EmailSubscriber.objects.get(
+                discount_code=code,
+                code_used=False,
+                is_active=True
+            )
+        except EmailSubscriber.DoesNotExist:
+            messages.error(request, 'Invalid or already used discount code.')
+            return redirect('cart')
+
+        # Calculate discount using Decimal for precise calculation
+        from decimal import Decimal
+        discount_percentage = Decimal('0.10')  # 10% as Decimal
+        discount_amount = cart_total * discount_percentage
+        new_total = cart_total - discount_amount
+
+        # Clear any existing discount first
+        request.session.pop('discount_code', None)
+        request.session.pop('cart_total', None)
+        request.session.pop('discount_amount', None)
+
+        # Store new discount information in session
+        request.session['discount_code'] = code
+        request.session['cart_total'] = str(cart_total)  # Convert Decimal to string for session storage
+        request.session['discount_amount'] = str(discount_amount)  # Convert Decimal to string for session storage
+        request.session.modified = True
+
+        # Mark the code as applied (but not used until checkout)
+        messages.success(request, 
+            f'Discount code applied successfully! '
+            f'₦{discount_amount:,.2f} has been deducted from your total.'
+        )
+        return redirect('cart')
+
+    except Cart.DoesNotExist:
+        messages.error(request, 'No active cart found.')
+        return redirect('cart')
+    except ValueError as ve:
+        messages.error(request, str(ve))
+        return redirect('cart')
+    except Exception as e:
+        import traceback
+        print(f"Error applying discount code: {str(e)}")
+        print(traceback.format_exc())  # This will print the full error traceback
+        messages.error(request, 'An unexpected error occurred. Please try again.')
+        return redirect('cart')
 
 def upcoming_merch(request):
     categories = Category.objects.all()

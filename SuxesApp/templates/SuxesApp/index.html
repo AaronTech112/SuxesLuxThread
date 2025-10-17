@@ -631,6 +631,161 @@
     <a href="https://wa.me/2349153619560" class="whatsapp-float" target="_blank">
         <i class="fab fa-whatsapp"></i>
     </a>
+
+    <!-- Discount Float Button -->
+    <div class="discount-float" onclick="showDiscountModal()">
+        <i class="fas fa-tags"></i>
+        <span>Get 10% OFF!</span>
+    </div>
+
+    <!-- Discount Modal -->
+    <div id="discountModal" class="discount-modal">
+        <div class="discount-modal-content">
+            <span class="close-modal" onclick="closeDiscountModal()">&times;</span>
+            <h3>Get 10% OFF Your Order!</h3>
+            <p>Enter your email to receive a discount code for 10% off orders above ₦150,000</p>
+            <form id="discountForm" class="discount-form">
+                {% csrf_token %}
+                <input type="email" name="email" placeholder="Enter your email" required>
+                <button type="submit">Get Discount Code</button>
+            </form>
+            <div id="discountResult" style="margin-top: 15px;"></div>
+        </div>
+    </div>
+
+    <style>
+        /* Discount Float Button */
+        .discount-float {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background-color: #ff4444;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            box-shadow: 2px 2px 3px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .discount-float:hover {
+            background-color: #cc0000;
+            transform: scale(1.05);
+        }
+
+        .discount-float i {
+            margin-right: 8px;
+        }
+
+        /* Discount Modal */
+        .discount-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1001;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .discount-modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .discount-form input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            margin: 15px 0;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .discount-form button {
+            background-color: #000;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .discount-form button:hover {
+            background-color: #333;
+        }
+    </style>
+
+    <script>
+        function showDiscountModal() {
+            document.getElementById('discountModal').style.display = 'flex';
+        }
+
+        function closeDiscountModal() {
+            document.getElementById('discountModal').style.display = 'none';
+        }
+
+        document.getElementById('discountForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            
+            fetch('/get-discount-code/', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                const resultDiv = document.getElementById('discountResult');
+                if (data.success) {
+                    resultDiv.innerHTML = `
+                        <div class="alert alert-success">
+                            <strong>Success!</strong><br>
+                            Your discount code: <strong>${data.discount_code}</strong><br>
+                            ${data.message}
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="alert alert-danger">
+                            <strong>Error:</strong> ${data.error}
+                        </div>
+                    `;
+                }
+            })
+            .catch(error => {
+                document.getElementById('discountResult').innerHTML = `
+                    <div class="alert alert-danger">
+                        <strong>Error:</strong> An error occurred. Please try again.
+                    </div>
+                `;
+            });
+        });
+    </script>
 </body>
 <script type="text/javascript"> 
          window.omnisend = window.omnisend || []; 

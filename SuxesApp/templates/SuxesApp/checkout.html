@@ -549,13 +549,24 @@
                 <div class="cart-summary">
                     <h4 class="mb-3">Order Summary</h4>
                     <p class="d-flex justify-content-between">
-                        <span>Total:</span>
+                        <span>Subtotal:</span>
                         <span>₦{{ subtotal|floatformat:0 }}</span>
                     </p>
+
+                    {% if applied_discount and discount_amount > 0 %}
+                    <p class="d-flex justify-content-between text-success">
+                        <span>Discount (10%):</span>
+                        <span>-₦{{ discount_amount|floatformat:0 }}</span>
+                    </p>
+                    {% endif %}
+
                     <p class="text-muted small">
                         <em>* Shipping fee will be calculated based on your location and communicated via email.</em>
                     </p>
-                    <hr />
+                    <hr>
+                    <p class="d-flex justify-content-between fw-bold">
+                        <span>Total:</span>
+                        <span>₦{{ total_price|floatformat:0 }}</span>
                     </p>
                     <div class="d-grid gap-2 mt-4">
                         <form method="POST" action="{% url 'checkout' %}">
@@ -566,6 +577,43 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Add JavaScript for handling discount code -->
+            <script>
+                document.getElementById('discountForm').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const formData = new FormData(this);
+                    formData.append('subtotal', '{{ subtotal }}');
+                    
+                    fetch('/apply-discount-code/', {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        const messageDiv = document.getElementById('discountMessage');
+                        if (data.success) {
+                            location.reload(); // Reload to show updated prices
+                        } else {
+                            messageDiv.innerHTML = `
+                                <div class="alert alert-danger">
+                                    <small>${data.error}</small>
+                                </div>
+                            `;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        document.getElementById('discountMessage').innerHTML = `
+                            <div class="alert alert-danger">
+                                <small>An error occurred. Please try again.</small>
+                            </div>
+                        `;
+                    });
+                });
         </div>
     </section>
 

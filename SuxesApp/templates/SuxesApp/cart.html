@@ -510,13 +510,42 @@
                             <span>Subtotal:</span>
                             <span>₦{{ subtotal|floatformat:0 }}</span>
                         </p>
+                        
+                        <!-- Discount Code Section -->
+                        <div class="discount-section mb-3">
+                            <form method="post" action="{% url 'apply_discount_code' %}" class="mb-3">
+                                {% csrf_token %}
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="discount_code" placeholder="Enter discount code" {% if applied_discount %}value="{{ applied_discount.discount_code }}" disabled{% endif %}>
+                                    <button type="submit" class="btn btn-outline-light" {% if applied_discount %}disabled{% endif %}>Apply</button>
+                                </div>
+                            </form>
+                            {% if messages %}
+                                {% for message in messages %}
+                                    <div class="alert alert-{{ message.tags }} mb-3">
+                                        <small>{{ message }}</small>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                            {% if applied_discount and subtotal >= 150000 %}
+                            <div class="alert alert-success mb-3">
+                                <small>Discount applied: -₦{{ discount_amount|floatformat:0 }}</small>
+                            </div>
+                            {% endif %}
+                            {% if subtotal < 150000 %}
+                            <div class="alert alert-info mb-3">
+                                <small>Add ₦{{ 150000|add:"-"|add:subtotal|floatformat:0 }} more to your cart to be eligible for the discount code.</small>
+                            </div>
+                            {% endif %}
+                        </div>
+
                         <p class="text-muted small">
                             <em>* Shipping fee will be calculated based on your location and communicated via email.</em>
                         </p>
                         <hr>
                         <p class="d-flex justify-content-between fw-bold">
                             <span>Total:</span>
-                            <span>₦{{ subtotal|floatformat:0 }}</span>
+                            <span>₦{{ total_after_discount|default:subtotal|floatformat:0 }}</span>
                         </p>
                         <div class="d-grid gap-2 mt-4">
                             {% if cart_items %}
@@ -594,6 +623,10 @@
 
     <!-- Bootstrap JS (for navbar toggle, no dynamic functions) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <!-- No JavaScript needed for discount code handling -->
+        });
+    </script>
 
     <!-- WhatsApp Float Button -->
     <a href="https://wa.me/2349153619560" class="whatsapp-float" target="_blank">
