@@ -1,7 +1,7 @@
-media/
-static/
-SuxesApp/migrations/
-db.sqlite3
-SuxesApp/__pycache__/
-manage.py
+# media/
+# static/
+# SuxesApp/migrations/
+# db.sqlite3
+# SuxesApp/__pycache__/
+# manage.py
 .vscode/

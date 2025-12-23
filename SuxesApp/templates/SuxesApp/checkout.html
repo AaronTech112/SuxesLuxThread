@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% include 'SuxesApp/includes/tiktok_pixel.html' %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SuXeS Lux Thread - Checkout</title>
@@ -663,6 +664,26 @@
         omnisend.push(["brandID", "68e3b4293feff11a0dacc0b1"]);
         omnisend.push(["track", "$pageViewed"]);
         !function(){var e=document.createElement("script");e.type="text/javascript",e.async=!0,e.src="https://omnisnippet1.com/inshop/launcher-v2.js";var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t)}();
+    </script>
+
+    <script>
+        // InitiateCheckout Event
+        var checkoutContents = [];
+        {% for item in cart_items %}
+        checkoutContents.push({
+            content_id: '{{ item.product.id }}',
+            content_name: '{{ item.product.name|escapejs }}',
+            quantity: {{ item.quantity }},
+            price: {{ item.product.price }},
+        });
+        {% endfor %}
+
+        ttq.track('InitiateCheckout', {
+            contents: checkoutContents,
+            content_type: 'product',
+            value: {{ total_price|default:0 }},
+            currency: 'NGN',
+        });
     </script>
 </body>
 

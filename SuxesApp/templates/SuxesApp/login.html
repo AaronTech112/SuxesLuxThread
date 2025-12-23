@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% include 'SuxesApp/includes/tiktok_pixel.html' %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SuXeS Lux Thread - Login</title>
@@ -388,8 +389,8 @@
                         <p>Don't have an account? <a href="{% url 'register' %}">Register here</a></p>
                     </div>
                     <div class="trust-badges">
-                        <img src="assets/images/pci-dss.png" alt="PCI DSS Compliant">
-                        <img src="assets/images/ssl-secure.png" alt="SSL Secure">
+                        <img src="{% static 'images/pci-dss.png' %}" alt="PCI DSS Compliant">
+                        <img src="{% static 'images/ssl-secure.png' %}" alt="SSL Secure">
                     </div>
                 </div>
             </div>

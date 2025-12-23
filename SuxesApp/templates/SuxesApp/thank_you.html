@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% include 'SuxesApp/includes/tiktok_pixel.html' %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SuXeS Lux Thread - Checkout</title>
@@ -506,6 +507,24 @@
         omnisend.push(["brandID", "68e3b4293feff11a0dacc0b1"]);
         omnisend.push(["track", "$pageViewed"]);
         !function(){var e=document.createElement("script");e.type="text/javascript",e.async=!0,e.src="https://omnisnippet1.com/inshop/launcher-v2.js";var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t)}();
+    </script>
+
+    <script>
+        // CompletePayment Event
+        // Note: Server-side event is also sent for reliability. 
+        // This client-side event is for immediate feedback and redundancy.
+        
+        // Since we don't have cart items here (they are deleted), we might not be able to send full contents list
+        // unless we pass it from the view or use the transaction object to reconstruct it if possible.
+        // The transaction object has 'products' (ManyToMany) but not quantities per line item easily unless stored.
+        // But for pixel, value is most important.
+        
+        ttq.track('CompletePayment', {
+            content_id: '{{ transaction.id }}',
+            content_type: 'product',
+            value: {{ transaction.amount }},
+            currency: 'NGN',
+        });
     </script>
 </body>
 </html>

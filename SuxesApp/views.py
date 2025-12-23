@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import RegisterForm, CheckoutForm, AddressForm, EmailSubscriptionForm
+from .utils import send_tiktok_server_event
 from django.contrib import messages
 from .models import (
     Cart, CartItem, Product, Category, Transaction, Size, 
@@ -255,7 +256,18 @@ def payment_callback(request):
                     transaction.save()
                     cart = Cart.objects.get(user=transaction.user)
                     cart_items = cart.items.all()
+                    
+                    # Prepare TikTok Event Data
+                    tiktok_contents = []
+                    
                     for cart_item in cart_items:
+                        tiktok_contents.append({
+                            'content_id': str(cart_item.product.id),
+                            'content_name': cart_item.product.name,
+                            'quantity': cart_item.quantity,
+                            'price': float(cart_item.product.price)
+                        })
+
                         product = cart_item.product
                         if product.in_stock >= cart_item.quantity:
                             product.in_stock -= cart_item.quantity
@@ -265,6 +277,24 @@ def payment_callback(request):
                             transaction.save()
                             messages.error(request, f"Insufficient stock for {product.name}.")
                             return redirect('cart')
+
+                    # Send TikTok Server-Side Event: CompletePayment
+                    try:
+                        send_tiktok_server_event(
+                            event_name='CompletePayment',
+                            event_data={
+                                'value': float(transaction.amount),
+                                'currency': 'NGN',
+                                'contents': tiktok_contents,
+                                'content_type': 'product'
+                            },
+                            user=request.user,
+                            event_id=str(transaction.id),
+                            url=request.build_absolute_uri()
+                        )
+                    except Exception as e:
+                        print(f"TikTok Event Error: {e}")
+
                     cart_items.delete()
                     messages.success(request, "Payment successful! Your order is being processed.")
                     return redirect('thank_you', transaction_id=transaction.id)  # Redirect to thank_you page
