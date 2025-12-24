@@ -387,6 +387,17 @@ def add_to_cart(request, product_id):
         cart_item.quantity = quantity
     cart_item.save()
 
+    # Set session variable for TikTok Pixel AddToCart event
+    request.session['tiktok_pixel_add_to_cart'] = {
+        'content_id': str(product.id),
+        'content_name': product.name,
+        'content_category': product.category.name if product.category else '',
+        'quantity': quantity,
+        'price': float(product.price),
+        'value': float(product.price) * quantity,
+        'currency': 'NGN',
+    }
+
     messages.success(request, f"{product.name} ({size_name or 'No size'}, {color_name or 'No color'}) added to cart!")
     return redirect('product_detail', product_id=product.id)
 

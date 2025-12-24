@@ -510,20 +510,25 @@
     </script>
 
     <script>
-        // CompletePayment Event
-        // Note: Server-side event is also sent for reliability. 
-        // This client-side event is for immediate feedback and redundancy.
-        
-        // Since we don't have cart items here (they are deleted), we might not be able to send full contents list
-        // unless we pass it from the view or use the transaction object to reconstruct it if possible.
-        // The transaction object has 'products' (ManyToMany) but not quantities per line item easily unless stored.
-        // But for pixel, value is most important.
-        
-        ttq.track('CompletePayment', {
-            content_id: '{{ transaction.id }}',
-            content_type: 'product',
-            value: {{ transaction.amount }},
-            currency: 'NGN',
+        // Purchase Event
+        // We try to reconstruct contents from transaction products, though quantity might be inexact (assumed 1 per product type in list if not available)
+        var purchaseContents = [];
+        {% for product in transaction.products.all %}
+        purchaseContents.push({
+            "content_id": "{{ product.id }}", 
+            "content_type": "product", 
+            "content_name": "{{ product.name|escapejs }}", 
+            "content_category": "{{ product.category.name|escapejs }}",
+            "price": {{ product.price }},
+            "quantity": 1 
+        });
+        {% endfor %}
+
+        ttq.track('Purchase', {
+            "contents": purchaseContents,
+            "value": {{ transaction.amount }}, 
+            "currency": "NGN",
+            "status": "complete"
         });
     </script>
 </body>

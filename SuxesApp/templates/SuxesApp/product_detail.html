@@ -680,23 +680,35 @@
     <script>
         // ViewContent Event
         ttq.track('ViewContent', {
-            content_id: '{{ product.id }}',
-            content_name: '{{ product.name|escapejs }}',
-            content_type: 'product',
-            price: {{ product.price }},
-            currency: 'NGN',
+            "contents": [
+                {
+                    "content_id": "{{ product.id }}", 
+                    "content_type": "product", 
+                    "content_name": "{{ product.name|escapejs }}", 
+                    "content_category": "{{ product.category.name|escapejs }}", 
+                    "price": {{ product.price }}, 
+                    "brand": "Suxes Lux Thread"
+                }
+            ],
+            "value": {{ product.price }}, 
+            "currency": "NGN",
         });
 
         // AddToCart Event (triggered if session flag is present)
         {% if pixel_add_to_cart %}
         ttq.track('AddToCart', {
-            content_id: '{{ pixel_add_to_cart.content_id }}',
-            content_name: '{{ pixel_add_to_cart.content_name|escapejs }}',
-            content_type: 'product',
-            quantity: {{ pixel_add_to_cart.quantity }},
-            price: {{ pixel_add_to_cart.price }},
-            value: {{ pixel_add_to_cart.value }},
-            currency: '{{ pixel_add_to_cart.currency }}',
+            "contents": [
+                {
+                    "content_id": "{{ pixel_add_to_cart.content_id }}", 
+                    "content_type": "product", 
+                    "content_name": "{{ pixel_add_to_cart.content_name|escapejs }}",
+                    "content_category": "{{ pixel_add_to_cart.content_category|escapejs }}",
+                    "price": {{ pixel_add_to_cart.price }},
+                    "quantity": {{ pixel_add_to_cart.quantity }}
+                }
+            ],
+            "value": {{ pixel_add_to_cart.value }}, 
+            "currency": "{{ pixel_add_to_cart.currency }}" 
         });
         {% endif %}
     </script>

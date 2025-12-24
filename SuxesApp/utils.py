@@ -19,11 +19,11 @@ def send_tiktok_server_event(event_name, event_data, user, event_id=None, url=No
         event_id (str): Unique event ID for deduplication.
         url (str): The page URL where the event happened.
     """
-    if not TIKTOK_ACCESS_TOKEN or TIKTOK_PIXEL_ID == "D53J4HRC77U9GK0PCE80":
+    if not TIKTOK_ACCESS_TOKEN or TIKTOK_PIXEL_ID == "INSERT_TIKTOK_PIXEL_ID_HERE":
         print("TikTok Pixel ID or Access Token not configured correctly.")
         # We proceed anyway in case the user updates the ID later, but usually we might want to return.
         # But if ID is missing, API will fail.
-        if TIKTOK_PIXEL_ID == "D53J4HRC77U9GK0PCE80":
+        if TIKTOK_PIXEL_ID == "INSERT_TIKTOK_PIXEL_ID_HERE":
              return
 
     endpoint = "https://business-api.tiktok.com/open_api/v1.3/pixel/track/"

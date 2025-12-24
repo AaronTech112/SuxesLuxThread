@@ -671,18 +671,19 @@
         var checkoutContents = [];
         {% for item in cart_items %}
         checkoutContents.push({
-            content_id: '{{ item.product.id }}',
-            content_name: '{{ item.product.name|escapejs }}',
-            quantity: {{ item.quantity }},
-            price: {{ item.product.price }},
+            "content_id": "{{ item.product.id }}", 
+            "content_type": "product", 
+            "content_name": "{{ item.product.name|escapejs }}", 
+            "content_category": "{{ item.product.category.name|escapejs }}",
+            "price": {{ item.product.price }},
+            "quantity": {{ item.quantity }}
         });
         {% endfor %}
 
         ttq.track('InitiateCheckout', {
-            contents: checkoutContents,
-            content_type: 'product',
-            value: {{ total_price|default:0 }},
-            currency: 'NGN',
+            "contents": checkoutContents,
+            "value": {{ total_price|default:0 }},
+            "currency": "NGN"
         });
     </script>
 </body>
